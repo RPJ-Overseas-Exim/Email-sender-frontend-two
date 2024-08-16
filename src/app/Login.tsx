@@ -19,6 +19,7 @@ import { Login as login } from "@/lib/requestHellpers/PostRequest";
 import { useRouter } from "next/navigation";
 import useAuth from "@/components/context/AuthProvider";
 import { useEffect } from "react";
+import Spinner from "@/components/ui/Spinner";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -43,19 +44,24 @@ export default function Login() {
     try {
       const res = await login(data);
       if (res.token) {
+        setAuth({ login: true, role: res?.role || "user" });
         router.push("/dashboard");
       }
     } catch (error) {
       console.log(error);
-      setAuth({ login: "false", role: "" });
+      setAuth({ login: false, role: "" });
     }
   };
 
   useEffect(() => {
     if (auth.login) {
       router.push("/dashboard");
+    } else {
+      setAuth({ login: false, role: "" });
     }
   }, [auth.login]);
+
+  if (auth.login) return <Spinner />;
   return (
     <section
       id="loginForm"

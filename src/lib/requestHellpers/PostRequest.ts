@@ -30,7 +30,7 @@ export async function Login(data: any) {
   const resJson = await res.json();
   cookieStore.set("Authentication", resJson.token, {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "strict",
     secure: true,
   });
   return resJson;

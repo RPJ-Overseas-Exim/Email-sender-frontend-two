@@ -8,6 +8,8 @@
 
 .sidebar__title {
   display: none;
+  font-size: var(--text-xl);
+  font-weight: bolder;
 }
 
 .sidebar__nav ul {
@@ -39,7 +41,7 @@
 }
 
 .sidebar__header {
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: center;
   width: 80%;
@@ -52,11 +54,15 @@
   }
   .admin-sidebar {
     position: relative;
-    width: 20%;
+    width: 30%;
     height: 100%;
     top: 0;
     border: 0;
     border-right: 1px solid hsl(var(--border));
+  }
+
+  .sidebar__header {
+    display: flex;
   }
 
   .aside__nav-item {
@@ -103,7 +109,5 @@
 
   .sidebar__title {
     display: block;
-    font-size: var(--text-xl);
-    font-weight: bolder;
   }
 }

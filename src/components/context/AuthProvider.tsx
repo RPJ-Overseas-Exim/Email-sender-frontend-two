@@ -19,7 +19,7 @@ export const AuthProvider = ({
   const [auth, setAuth] = useState<Auth>({ login: false, role: "" });
 
   const fetchRole = async () => {
-    const res = await GetRequest("/auth/login");
+    const res = await GetRequest("/auth/role");
     if (res.role) {
       setAuth({ login: true, role: res.role });
     } else router.push("/");

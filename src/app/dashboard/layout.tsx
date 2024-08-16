@@ -8,7 +8,7 @@ export default function layout({
   return (
     <main className="flex h-dvh">
       <Sidebar />
-      <div className="lg:w-[80%]">{children}</div>
+      <div className="w-full lg:w-[70%]">{children}</div>
     </main>
   );
 }

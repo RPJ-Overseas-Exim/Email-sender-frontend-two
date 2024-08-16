@@ -1,19 +1,30 @@
 "use client";
 import "./Sidebar.css";
 import { MdEditDocument } from "react-icons/md";
-import { TbTableImport } from "react-icons/tb";
+import { TbTableImport, TbLogout } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeSwitch from "@/components/context/ThemeSwitch";
+import { Logout } from "@/lib/requestHellpers/GetRequest";
+import useAuth from "@/components/context/AuthProvider";
 
 export default function Sidebar() {
   const path = usePathname();
+  const { setAuth } = useAuth();
+
+  const handleLogout = async () => {
+    setAuth({ login: false, role: "" });
+    await Logout();
+  };
+
   return (
     <aside className="admin-sidebar">
       <div className="sidebar__header">
         <h1 className="sidebar__title">Email Sender</h1>
-        <ThemeSwitch />
+        <div className="hidden lg:inline-block">
+          <ThemeSwitch />
+        </div>
       </div>
       <nav className="sidebar__nav">
         <ul>
@@ -40,6 +51,15 @@ export default function Sidebar() {
             <Link href="/dashboard/users" className="aside__nav-item">
               <FaUsers /> <span>Users</span>
             </Link>
+          </li>
+          <li>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="aside__nav-item"
+            >
+              <TbLogout /> <span>Log out</span>
+            </button>
           </li>
         </ul>
       </nav>

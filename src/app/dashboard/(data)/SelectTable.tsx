@@ -1,15 +1,18 @@
 "use client";
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
-import { CustomerTable } from "./enquiry-data-table";
-import { columns } from "./columns";
+import { CustomerTable } from "./data-table";
+import { columns, userColumns } from "./columns";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSearchParams, useRouter } from "next/navigation";
+import useAuth from "@/components/context/AuthProvider";
+import { UserTable } from "./user-data-table";
 
 export default function SelectTable({ data }: { data: Customer[] }) {
   const [tab, setTab] = useState<"enquiry" | "reorder" | undefined>(undefined);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { auth } = useAuth();
 
   const handleTab = (tab: "enquiry" | "reorder" | undefined = undefined) => {
     setTab(tab);
@@ -58,7 +61,11 @@ export default function SelectTable({ data }: { data: Customer[] }) {
         </button>
       </div>
 
-      <CustomerTable columns={columns} data={data} />
+      {auth.role === "user" ? (
+        <UserTable columns={userColumns} data={data} />
+      ) : (
+        <CustomerTable columns={columns} data={data} />
+      )}
     </div>
   );
 }

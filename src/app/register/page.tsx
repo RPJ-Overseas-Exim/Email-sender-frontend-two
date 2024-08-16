@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { PoppinsHeading } from "@/lib/fonts";
 import PostRequest from "@/lib/requestHellpers/PostRequest";
-import { useEffect } from "react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   username: z
@@ -55,7 +55,7 @@ export default function Login() {
         confirmPassword: null,
       });
       if (res.ok) {
-        console.log("registeration successfull");
+        toast.success("User added successfully");
       }
     } catch (error) {
       console.log(error);
@@ -137,7 +137,11 @@ export default function Login() {
               )}
             />
 
-            <Button type="submit" className="mt-4 bg-deepBlue">
+            <Button
+              type="submit"
+              className="mt-4 bg-deepBlue"
+              disabled={form.formState.isSubmitting}
+            >
               Submit
             </Button>
           </form>

@@ -32,7 +32,7 @@ export function CustomerTable<TData, TValue>({
   });
 
   return (
-    <div className="select-none rounded-md border">
+    <div className="max-w-[100vw] select-none overflow-auto rounded-md border">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

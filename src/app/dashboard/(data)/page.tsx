@@ -4,6 +4,22 @@ import "./dataTable.css";
 import GetRequest from "@/lib/requestHellpers/GetRequest";
 import { redirect } from "next/navigation";
 
+export default async function DataEditor({
+  searchParams,
+}: {
+  searchParams: { [x: string]: string };
+}) {
+  const data = await applyFilters(searchParams);
+  return (
+    <section id="data-editor" className="data-editor mx-auto w-[96%]">
+      <h1 className="sidebar__title py-8" style={{ display: "block" }}>
+        Data Editor
+      </h1>
+      <SelectTable data={data} />
+    </section>
+  );
+}
+
 function extractData(
   resData: {
     customer: { [x: string]: string };
@@ -30,11 +46,7 @@ function extractData(
   return customers;
 }
 
-export default async function DataEditor({
-  searchParams,
-}: {
-  searchParams: { [x: string]: string };
-}) {
+async function applyFilters(searchParams: { [x: string]: string }) {
   let data: Customer[] = [
     {
       name: "Allen",
@@ -74,11 +86,5 @@ export default async function DataEditor({
     console.log(error);
     redirect("/");
   }
-
-  return (
-    <section id="data-editor" className="data-editor lg:mx-auto lg:w-[96%]">
-      <h1 className="sidebar__title py-8">Data Editor</h1>
-      <SelectTable data={data} />
-    </section>
-  );
+  return data;
 }
