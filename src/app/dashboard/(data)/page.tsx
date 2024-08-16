@@ -1,9 +1,41 @@
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import SelectTable from "./SelectTable";
+import "./dataTable.css";
+import GetRequest from "@/lib/requestHellpers/GetRequest";
+import { redirect } from "next/navigation";
 
-export default function DataEditor() {
-  const data: Customer[] = [
+function extractData(
+  resData: {
+    customer: { [x: string]: string };
+    product: { [x: string]: string };
+  }[],
+) {
+  let customers: Customer[] = [];
+  resData.map(
+    (customer: {
+      customer: { [x: string]: string };
+      product: { [x: string]: string };
+    }) => {
+      const { name, email } = customer.customer;
+      const product = customer.product.name;
+      const status: ("pending" | "sent")[] = ["pending", "sent"];
+      customers.push({
+        name,
+        email,
+        product: product,
+        status: status[Math.floor(Math.random() * 2)],
+      });
+    },
+  );
+  return customers;
+}
+
+export default async function DataEditor({
+  searchParams,
+}: {
+  searchParams: { [x: string]: string };
+}) {
+  let data: Customer[] = [
     {
       name: "Allen",
       email: "allen@ldfkj.com",
@@ -29,10 +61,24 @@ export default function DataEditor() {
       status: "sent",
     },
   ];
+
+  try {
+    const queryString = searchParams["tab"]
+      ? "?type=" + searchParams["tab"]
+      : "";
+    const res = await GetRequest("/customers" + queryString);
+    if (res.data) {
+      data = extractData(res.data);
+    } else redirect("/");
+  } catch (error) {
+    console.log(error);
+    redirect("/");
+  }
+
   return (
     <section id="data-editor" className="data-editor lg:mx-auto lg:w-[96%]">
       <h1 className="sidebar__title py-8">Data Editor</h1>
-      <DataTable columns={columns} data={data} />
+      <SelectTable data={data} />
     </section>
   );
 }

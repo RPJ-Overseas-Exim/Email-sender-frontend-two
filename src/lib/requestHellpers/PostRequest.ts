@@ -21,7 +21,6 @@ export async function Login(data: any) {
   const cookieStore = cookies();
   const { API_URL, API_VER } = process.env;
   if (!API_URL || !API_VER) return;
-  console.log(API_URL + API_VER + "/auth/login");
   const res = await fetch(API_URL + API_VER + "/auth/login", {
     method: "POST",
     ...headers(),

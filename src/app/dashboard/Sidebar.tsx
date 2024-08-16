@@ -5,7 +5,7 @@ import { TbTableImport } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import ThemeSwitch from "@/components/ThemeSwitch";
+import ThemeSwitch from "@/components/context/ThemeSwitch";
 
 export default function Sidebar() {
   const path = usePathname();
