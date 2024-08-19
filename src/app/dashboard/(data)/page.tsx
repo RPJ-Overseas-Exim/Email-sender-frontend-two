@@ -32,10 +32,11 @@ function extractData(
       customer: { [x: string]: string };
       product: { [x: string]: string };
     }) => {
-      const { name, email } = customer.customer;
+      const { id, name, email } = customer.customer;
       const product = customer.product.name;
       const status: ("pending" | "sent")[] = ["pending", "sent"];
       customers.push({
+        id,
         name,
         email,
         product: product,

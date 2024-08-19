@@ -1,17 +1,16 @@
 "use server";
-import { cookies } from "next/headers";
 import headers from "./Headers";
-import { redirect } from "next/navigation";
 
-export default async function GetRequest(url: string) {
+export default async function DeleteRequest(url: string) {
   const { API_URL, API_VER } = process.env;
   if (!API_URL || !API_VER) return;
 
   let res = null;
   try {
+    console.log(API_URL + API_VER + url);
     res = await (
       await fetch(API_URL + API_VER + url, {
-        method: "GET",
+        method: "DELETE",
         ...headers(),
         credentials: "include",
       })
@@ -19,12 +18,7 @@ export default async function GetRequest(url: string) {
   } catch (error) {
     console.log(error);
   } finally {
+    console.log(res);
     return res;
   }
-}
-
-export async function Logout(): Promise<void> {
-  const cookieStore = cookies();
-  cookieStore.delete("Authentication");
-  redirect("/");
 }

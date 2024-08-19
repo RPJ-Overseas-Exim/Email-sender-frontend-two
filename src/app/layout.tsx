@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import CustomThemeProvider from "@/components/context/CustomThemeProvider";
 import { OpenSans } from "@/lib/fonts";
-import { AuthProvider } from "@/components/context/AuthProvider";
+import Providers from "./Providers";
 
 export const metadata: Metadata = {
   title: "Email Sender",
@@ -17,9 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={OpenSans.className}>
-        <AuthProvider>
-          <CustomThemeProvider>{children}</CustomThemeProvider>
-        </AuthProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

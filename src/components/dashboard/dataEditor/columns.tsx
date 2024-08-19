@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { IoIosMore } from "react-icons/io";
+import DeleteRequest from "@/lib/requestHellpers/DeleteRequest";
+import { toast } from "sonner";
+import { revalidatePath } from "next/cache";
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -33,8 +36,19 @@ export const columns: ColumnDef<Customer>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const customer = row.original;
 
+      const deleteCustomer = async (id: string | undefined) => {
+        if (!id) return;
+        const res = await DeleteRequest("/customers/" + id);
+        if (res.data) {
+          toast.success(res.message);
+        }
+        if (res.error) {
+          toast.error(res.error);
+        }
+        revalidatePath("/dashboard");
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -46,10 +60,18 @@ export const columns: ColumnDef<Customer>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.email)}
+              onClick={() => navigator.clipboard.writeText(customer.email)}
             >
               Copy Email
             </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                deleteCustomer(customer.id);
+              }}
+            >
+              Delete Customer
+            </DropdownMenuItem>
+            <DropdownMenuItem>Edit Customer</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
           </DropdownMenuContent>
@@ -76,7 +98,7 @@ export const userColumns: ColumnDef<Customer>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const customer = row.original;
 
       return (
         <DropdownMenu>

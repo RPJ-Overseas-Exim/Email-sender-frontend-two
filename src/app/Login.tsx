@@ -19,7 +19,6 @@ import { Login as login } from "@/lib/requestHellpers/PostRequest";
 import { useRouter } from "next/navigation";
 import useAuth from "@/components/context/AuthProvider";
 import { useEffect } from "react";
-import Spinner from "@/components/ui/Spinner";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -54,14 +53,13 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (auth.login) {
+    if (auth && auth.login) {
       router.push("/dashboard");
     } else {
       setAuth({ login: false, role: "" });
     }
-  }, [auth.login]);
+  }, [setAuth]);
 
-  if (auth.login) return <Spinner />;
   return (
     <section
       id="loginForm"

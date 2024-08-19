@@ -1,13 +1,15 @@
 "use client";
 import GetRequest from "@/lib/requestHellpers/GetRequest";
 import { useRouter } from "next/navigation";
-import { createContext, useEffect, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { type Dispatch } from "react";
 
-type Auth = {
-  login: Boolean;
-  role: string;
-};
+type Auth =
+  | {
+      login: Boolean;
+      role: string;
+    }
+  | undefined;
 const AuthContext = createContext<
   undefined | { auth: Auth; setAuth: Dispatch<any> }
 >(undefined);
@@ -16,7 +18,7 @@ export const AuthProvider = ({
   children,
 }: Readonly<{ children: React.ReactNode }>) => {
   const router = useRouter();
-  const [auth, setAuth] = useState<Auth>({ login: false, role: "" });
+  const [auth, setAuth] = useState<Auth>();
 
   const fetchRole = async () => {
     const res = await GetRequest("/auth/role");
