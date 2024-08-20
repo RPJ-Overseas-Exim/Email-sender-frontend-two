@@ -1,21 +1,26 @@
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
 import SelectTable from "./SelectTable";
 import "./dataTable.css";
-import GetRequest from "@/lib/requestHellpers/GetRequest";
+import GetRequest, { Logout } from "@/lib/requestHellpers/GetRequest";
 import { redirect } from "next/navigation";
-
+import ImportCSV from "@/components/dashboard/dataEditor/ImportCSV";
+export const dynamic = "auto";
 export default async function DataEditor({
   searchParams,
 }: {
   searchParams: { [x: string]: string };
 }) {
-  const data = await applyFilters(searchParams);
+  const { data, count } = await applyFilters(searchParams);
   return (
     <section id="data-editor" className="data-editor mx-auto w-[96%]">
-      <h1 className="sidebar__title py-8" style={{ display: "block" }}>
-        Data Editor
-      </h1>
-      <SelectTable data={data} />
+      <div className="flex items-center justify-between">
+        <h1 className="sidebar__title py-8" style={{ display: "block" }}>
+          Data Editor
+        </h1>
+
+        <ImportCSV />
+      </div>
+      <SelectTable data={data} count={Number(count)} />
     </section>
   );
 }
@@ -39,7 +44,7 @@ function extractData(
         id,
         name,
         email,
-        product: product,
+        productId: product,
         status: status[Math.floor(Math.random() * 2)],
       });
     },
@@ -52,40 +57,25 @@ async function applyFilters(searchParams: { [x: string]: string }) {
     {
       name: "Allen",
       email: "allen@ldfkj.com",
-      product: "Zolpidem",
+      productId: "Zolpidem",
       status: "pending",
     },
-    {
-      name: "Alex",
-      email: "allen@ldfkj.com",
-      product: "Alprazolam",
-      status: "sent",
-    },
-    {
-      name: "Zachary",
-      email: "allen@ldfkj.com",
-      product: "Zolpidem",
-      status: "sent",
-    },
-    {
-      name: "John",
-      email: "allen@ldfkj.com",
-      product: "Zolpidem",
-      status: "sent",
-    },
   ];
+  let count = 0;
 
   try {
-    const queryString = searchParams["tab"]
-      ? "?type=" + searchParams["tab"]
-      : "";
-    const res = await GetRequest("/customers" + queryString);
-    if (res.data) {
+    const queryString = new URLSearchParams(searchParams);
+
+    const res = await GetRequest("/customers?" + queryString.toString());
+    if (res.data && res.count) {
       data = extractData(res.data);
-    } else redirect("/");
+      count = res.count;
+    } else {
+      redirect("/");
+    }
   } catch (error) {
     console.log(error);
     redirect("/");
   }
-  return data;
+  return { data, count };
 }

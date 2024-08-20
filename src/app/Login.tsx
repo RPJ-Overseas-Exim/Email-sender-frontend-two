@@ -119,7 +119,7 @@ export default function Login() {
         </Form>
       </div>
       <p className="text-xs text-muted-foreground md:text-sm">
-        Don't have an account?{" "}
+        Don&apos;t have an account?&nbsp;
         <Link href="/register" className="text-deepBlue underline">
           Register
         </Link>
