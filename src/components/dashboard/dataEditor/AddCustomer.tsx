@@ -18,6 +18,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PostRequest from "@/lib/requestHellpers/PostRequest";
 import ComboBox from "./ComboBox";
+import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
+import revalPath from "@/lib/serverActions/revalPath";
 
 const formSchema = z.object({
   name: z.string().min(3, "Name should be at least 3 letters long"),
@@ -43,11 +45,9 @@ export default function AddCustomer() {
       const res = await PostRequest("/customers/" + customer.type, {
         customersData: [customer],
       });
-      if (typeof res === "string") {
-        return toast.error(res);
-      }
-      if (res !== undefined && res.length > 0) {
-        return toast.success("Order Added successfully.");
+      if (res.data) {
+        toast.success("Order Added successfully.");
+        return revalPath("/dashboard");
       }
     } catch (error) {
       console.error(error);
@@ -109,18 +109,14 @@ export default function AddCustomer() {
               </div>
             </div>
 
-            <ComboBox setProduct={setProduct} getProduct={getProduct} />
-
-            <div className="my-4 flex items-center space-x-2">
-              <div className="grid flex-1 gap-2">
-                <Label htmlFor="type">Type</Label>
-                <Input id="type" {...form.register("type")} />
-                {form.formState.errors.type && (
-                  <p className="m-0 text-sm text-red-400">
-                    {form.formState.errors.type.message}
-                  </p>
-                )}
-              </div>
+            <div className="flex items-center justify-between">
+              <ComboBox setProduct={setProduct} getProduct={getProduct} />
+              <TypeRadio
+                setType={(type: "enquiry" | "reorder") =>
+                  form.setValue("type", type)
+                }
+                getType={() => form.getValues("type")}
+              />
             </div>
 
             <div className="my-4 flex items-center space-x-2">

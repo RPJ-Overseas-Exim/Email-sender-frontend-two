@@ -18,7 +18,6 @@ export default async function DeleteRequest(url: string) {
   } catch (error) {
     console.log(error);
   } finally {
-    console.log(res);
     return res;
   }
 }
