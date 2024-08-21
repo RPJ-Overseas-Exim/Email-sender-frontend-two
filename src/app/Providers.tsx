@@ -8,10 +8,10 @@ export default function Providers({
   children: Readonly<React.ReactNode>;
 }) {
   return (
-    <AuthProvider>
-      <ReactQueryProvider>
+    <ReactQueryProvider>
+      <AuthProvider>
         <CustomThemeProvider>{children}</CustomThemeProvider>
-      </ReactQueryProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ReactQueryProvider>
   );
 }

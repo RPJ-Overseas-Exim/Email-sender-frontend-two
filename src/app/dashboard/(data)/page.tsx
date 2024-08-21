@@ -1,10 +1,9 @@
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
 import SelectTable from "./SelectTable";
 import "./dataTable.css";
-import GetRequest, { Logout } from "@/lib/requestHellpers/GetRequest";
-import { redirect } from "next/navigation";
+import GetRequest from "@/lib/requestHellpers/GetRequest";
 import ImportCSV from "@/components/dashboard/dataEditor/ImportCSV";
-export const dynamic = "auto";
+export const dynamic = "force-dynamic";
 export default async function DataEditor({
   searchParams,
 }: {
@@ -25,57 +24,36 @@ export default async function DataEditor({
   );
 }
 
-function extractData(
-  resData: {
-    customer: { [x: string]: string };
-    product: { [x: string]: string };
-  }[],
-) {
+function extractData(resData: { [x: string]: string }[]) {
   let customers: Customer[] = [];
-  resData.map(
-    (customer: {
-      customer: { [x: string]: string };
-      product: { [x: string]: string };
-    }) => {
-      const { id, name, email } = customer.customer;
-      const product = customer.product.name;
-      const status: ("pending" | "sent")[] = ["pending", "sent"];
-      customers.push({
-        id,
-        name,
-        email,
-        productId: product,
-        status: status[Math.floor(Math.random() * 2)],
-      });
-    },
-  );
+  resData.map((customer: { [x: string]: string }) => {
+    const { id, name, email, product, status } = customer;
+    customers.push({
+      id,
+      name,
+      email,
+      productId: product,
+      status: status ? "sent" : "pending",
+    });
+  });
   return customers;
 }
 
 async function applyFilters(searchParams: { [x: string]: string }) {
-  let data: Customer[] = [
-    {
-      name: "Allen",
-      email: "allen@ldfkj.com",
-      productId: "Zolpidem",
-      status: "pending",
-    },
-  ];
+  let data: Customer[];
   let count = 0;
 
   try {
     const queryString = new URLSearchParams(searchParams);
 
     const res = await GetRequest("/customers?" + queryString.toString());
-    if (res.data && res.count) {
+    if (res?.data && res?.count) {
       data = extractData(res.data);
       count = res.count;
-    } else {
-      redirect("/");
+      return { data, count };
     }
   } catch (error) {
     console.log(error);
-    redirect("/");
   }
-  return { data, count };
+  return { data: null, count };
 }

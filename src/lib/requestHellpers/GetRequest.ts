@@ -9,6 +9,7 @@ export default async function GetRequest(url: string) {
   let res = null;
   try {
     // console.log(API_URL + API_VER + url);
+    console.log({ ...headers() });
     res = await (
       await fetch(API_URL + API_VER + url, {
         method: "GET",

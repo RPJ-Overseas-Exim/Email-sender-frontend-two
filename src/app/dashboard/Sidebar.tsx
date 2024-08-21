@@ -4,7 +4,7 @@ import { MdEditDocument } from "react-icons/md";
 import { TbTableImport, TbLogout } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ThemeSwitch from "@/components/context/ThemeSwitch";
 import { Logout } from "@/lib/requestHellpers/GetRequest";
 import useAuth from "@/components/context/AuthProvider";
@@ -12,10 +12,12 @@ import useAuth from "@/components/context/AuthProvider";
 export default function Sidebar() {
   const path = usePathname();
   const { setAuth } = useAuth();
+  const router = useRouter();
 
   const handleLogout = async () => {
-    setAuth({ login: false, role: "" });
     await Logout();
+    setAuth(undefined);
+    router.push("/");
   };
 
   return (

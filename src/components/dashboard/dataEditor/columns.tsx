@@ -56,7 +56,6 @@ const AdminCell = ({
     if (!id) return;
     const res = await DeleteRequest("/customers/" + id);
     if (res.data) {
-      console.log(res.data);
       const data = res.data;
       toast(res.message, {
         action: {

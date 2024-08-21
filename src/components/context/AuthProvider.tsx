@@ -3,6 +3,7 @@ import GetRequest from "@/lib/requestHellpers/GetRequest";
 import { useRouter } from "next/navigation";
 import { createContext, useState, useContext, useEffect } from "react";
 import { type Dispatch } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 type Auth =
   | {
@@ -21,14 +22,19 @@ export const AuthProvider = ({
   const [auth, setAuth] = useState<Auth>();
 
   const fetchRole = async () => {
-    const res = await GetRequest("/auth/role");
-    if (res.role) {
-      setAuth({ login: true, role: res.role });
-    } else router.push("/");
+    return await GetRequest("/auth/role");
   };
+
+  const query = useQuery({ queryKey: ["authContext"], queryFn: fetchRole });
+
   useEffect(() => {
-    fetchRole();
-  }, [setAuth]);
+    if (query?.data?.role) {
+      setAuth({ login: true, role: query.data.role });
+    } else {
+      setAuth({ login: false, role: "" });
+      router.push("/");
+    }
+  }, [query?.data]);
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       {children}

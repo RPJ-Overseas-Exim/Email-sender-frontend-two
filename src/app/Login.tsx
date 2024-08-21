@@ -18,7 +18,7 @@ import { PoppinsHeading } from "@/lib/fonts";
 import { Login as login } from "@/lib/requestHellpers/PostRequest";
 import { useRouter } from "next/navigation";
 import useAuth from "@/components/context/AuthProvider";
-import { useEffect } from "react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -42,23 +42,19 @@ export default function Login() {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const res = await login(data);
+      console.log(res);
       if (res.token) {
         setAuth({ login: true, role: res?.role || "user" });
         router.push("/dashboard");
+      } else if (res.error) {
+        toast.error(res.error);
+        form.reset();
       }
     } catch (error) {
       console.log(error);
       setAuth({ login: false, role: "" });
     }
   };
-
-  useEffect(() => {
-    if (auth && auth.login) {
-      router.push("/dashboard");
-    } else {
-      setAuth({ login: false, role: "" });
-    }
-  }, [setAuth]);
 
   return (
     <section
