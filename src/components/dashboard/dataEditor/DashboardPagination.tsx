@@ -25,7 +25,7 @@ export default function DashboardPagination({ count }: { count: number }) {
 
   React.useEffect(() => {
     router.push("/dashboard?" + createQuery("offset", String(page - 1)));
-  }, [page, createQuery, router.push]);
+  }, [page]);
 
   React.useEffect(() => {
     setPage(

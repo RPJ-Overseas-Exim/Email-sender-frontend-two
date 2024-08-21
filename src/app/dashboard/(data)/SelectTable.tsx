@@ -31,12 +31,12 @@ export default function SelectTable({
   const { auth } = useAuth();
 
   const handleTab = (Intab: "enquiry" | "reorder" | undefined = undefined) => {
-    setTab(Intab);
     if (Intab === undefined) {
       router.push("/dashboard");
-      return;
+    } else {
+      router.push("/dashboard" + "?type=" + Intab);
     }
-    router.push("/dashboard" + "?type=" + Intab);
+    setTab(Intab);
   };
 
   if (auth === undefined || !data)
