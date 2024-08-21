@@ -1,0 +1,4 @@
+.dataTable__tab--active {
+  border-bottom: 2px solid hsl(var(--deep-blue));
+  color: hsl(var(--foreground));
+}

@@ -16,6 +16,9 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { PoppinsHeading } from "@/lib/fonts";
 import { Login as login } from "@/lib/requestHellpers/PostRequest";
+import { useRouter } from "next/navigation";
+import useAuth from "@/components/context/AuthProvider";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -26,6 +29,8 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+  const router = useRouter();
+  const { auth, setAuth } = useAuth();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,8 +43,16 @@ export default function Login() {
     try {
       const res = await login(data);
       console.log(res);
+      if (res.token) {
+        setAuth({ login: true, role: res?.role || "user" });
+        router.push("/dashboard");
+      } else if (res.error) {
+        toast.error(res.error);
+        form.reset();
+      }
     } catch (error) {
       console.log(error);
+      setAuth({ login: false, role: "" });
     }
   };
 
@@ -91,14 +104,18 @@ export default function Login() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="mt-4 bg-deepBlue">
+            <Button
+              type="submit"
+              className="mt-4 bg-deepBlue"
+              disabled={form.formState.isSubmitting}
+            >
               Submit
             </Button>
           </form>
         </Form>
       </div>
       <p className="text-xs text-muted-foreground md:text-sm">
-        Don't have an account?{" "}
+        Don&apos;t have an account?&nbsp;
         <Link href="/register" className="text-deepBlue underline">
           Register
         </Link>

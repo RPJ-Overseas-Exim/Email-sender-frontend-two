@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import CustomThemeProvider from "@/components/CustomThemeProvider";
 import { OpenSans } from "@/lib/fonts";
+import Providers from "./Providers";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Email Sender",
@@ -16,7 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={OpenSans.className}>
-        <CustomThemeProvider>{children}</CustomThemeProvider>
+        <Providers>{children}</Providers>
+        <Toaster richColors closeButton />
       </body>
     </html>
   );
