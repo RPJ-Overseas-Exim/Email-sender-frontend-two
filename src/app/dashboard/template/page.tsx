@@ -1,6 +1,6 @@
 import TemplateEditor from "./TemplateEditor";
 
-export default function page() {
+export default async function page() {
   return (
     <section id="data-editor" className="data-editor mx-auto w-[96%]">
       <div className="flex items-center justify-between">
