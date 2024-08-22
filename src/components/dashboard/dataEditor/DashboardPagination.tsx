@@ -36,7 +36,10 @@ export default function DashboardPagination({ count }: { count: number }) {
     <Pagination className="shop__pagination my-4">
       <PaginationContent>
         <PaginationItem>
-          <PaginationFirst onClick={() => setPage(1)} />
+          <PaginationFirst
+            onClick={() => setPage(1)}
+            href={"/dashboard?" + createQuery("offset", "1")}
+          />
         </PaginationItem>
         {page - 1 >= 1 && (
           <PaginationItem>
@@ -44,6 +47,7 @@ export default function DashboardPagination({ count }: { count: number }) {
               onClick={() => {
                 setPage(page - 1);
               }}
+              href={"/dashboard?" + createQuery("offset", String(page - 1))}
               className="rounded-md bg-[var(--bg-light)] hover:bg-gray-200"
             >
               {page - 1}
@@ -51,11 +55,12 @@ export default function DashboardPagination({ count }: { count: number }) {
           </PaginationItem>
         )}
         <PaginationItem className="rounded-md border border-[var(--text-gray)]">
-          <PaginationLink>{page}</PaginationLink>
+          <PaginationLink href="#">{page}</PaginationLink>
         </PaginationItem>
         {page + 1 <= lastPage && (
           <PaginationItem>
             <PaginationLink
+              href={"/dashboard?" + createQuery("offset", String(page + 1))}
               onClick={() => {
                 setPage(page + 1);
               }}
@@ -66,7 +71,10 @@ export default function DashboardPagination({ count }: { count: number }) {
           </PaginationItem>
         )}
         <PaginationItem>
-          <PaginationLast onClick={() => setPage(lastPage)} />
+          <PaginationLast
+            onClick={() => setPage(lastPage)}
+            href={"/dashboard?" + createQuery("offset", String(lastPage))}
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination>

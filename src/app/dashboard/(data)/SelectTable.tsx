@@ -5,7 +5,7 @@ import {
   columns,
   userColumns,
 } from "@/components/dashboard/dataEditor/columns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSearchParams, useRouter } from "next/navigation";
 import useAuth from "@/components/context/AuthProvider";
@@ -13,7 +13,6 @@ import { UserTable } from "@/components/dashboard/dataEditor/user-data-table";
 import Spinner from "@/components/ui/Spinner";
 import AddCustomer from "@/components/dashboard/dataEditor/AddCustomer";
 import DashboardPagination from "@/components/dashboard/dataEditor/DashboardPagination";
-import { Logout } from "@/lib/requestHellpers/GetRequest";
 
 export default function SelectTable({
   data,

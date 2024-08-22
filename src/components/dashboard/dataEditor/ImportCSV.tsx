@@ -24,11 +24,7 @@ export default function ImportCSV() {
         const jsonFile = await csvToJson(String(reader.result));
         const type = searchParams.get("tab") || "enquiry";
         try {
-          // console.log(
-          //   JSON.stringify({
-          //     customersData: jsonFile,
-          //   }),
-          // );
+          console.log(jsonFile);
           const res = await PostRequest("/customers/" + type, {
             customersData: jsonFile,
           });
@@ -68,7 +64,7 @@ export default function ImportCSV() {
 
 const csvToJson = async (file: string) => {
   if (!file.length) return;
-  const jsonArray = file.split("\n"),
+  const jsonArray = file.split("\r\n"),
     nameIndex = jsonArray[0].split(",").indexOf("name"),
     emailIndex = jsonArray[0].split(",").indexOf("email"),
     numberIndex = jsonArray[0].split(",").indexOf("number"),
@@ -91,6 +87,7 @@ const csvToJson = async (file: string) => {
         email = lineArray[emailIndex],
         product = lineArray[productIndex],
         number = lineArray[numberIndex];
+
       const jsonObj = {
         name,
         email,
