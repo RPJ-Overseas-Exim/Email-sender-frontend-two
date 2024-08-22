@@ -27,7 +27,7 @@ export default function SelectTable({
   );
 
   const router = useRouter();
-  const { auth } = useAuth();
+  const { auth, isFetching } = useAuth();
 
   const handleTab = (Intab: "enquiry" | "reorder" | undefined = undefined) => {
     if (Intab === undefined) {
@@ -38,7 +38,7 @@ export default function SelectTable({
     setTab(Intab);
   };
 
-  if (auth === undefined || !data)
+  if (isFetching || !data)
     return (
       <div className="space-between flex h-[calc(100dvh-172px)] items-center justify-center">
         <Spinner />

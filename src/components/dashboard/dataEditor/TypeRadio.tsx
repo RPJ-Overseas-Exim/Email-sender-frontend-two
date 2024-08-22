@@ -14,6 +14,7 @@ import {
 export default function TypeRadio({
   setType,
   getType,
+  ...field
 }: {
   setType: (type: "enquiry" | "reorder") => void;
   getType: () => string;
@@ -34,6 +35,7 @@ export default function TypeRadio({
               setValue(getType());
             }
           }}
+          {...field}
         >
           <DropdownMenuRadioItem value="enquiry">Enquiry</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="reorder">Reorder</DropdownMenuRadioItem>
