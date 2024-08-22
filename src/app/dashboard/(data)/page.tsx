@@ -27,13 +27,14 @@ export default async function DataEditor({
 function extractData(resData: { [x: string]: string }[]) {
   let customers: Customer[] = [];
   resData.map((customer: { [x: string]: string }) => {
-    const { id, name, email, product, status } = customer;
+    const { id, name, email, product, status, number } = customer;
     customers.push({
       id,
       name,
       email,
       productId: product,
       status: status ? "sent" : "pending",
+      number: number,
     });
   });
   return customers;

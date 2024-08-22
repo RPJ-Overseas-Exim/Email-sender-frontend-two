@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import revalPath from "@/lib/serverActions/revalPath";
 import PostRequest from "@/lib/requestHellpers/PostRequest";
 import { useSearchParams } from "next/navigation";
+import EditCustomer from "./EditCustomer";
+import ViewCustomer from "./ViewCustomer";
 
 const AdminCell = ({
   customer,
@@ -26,6 +28,7 @@ const AdminCell = ({
     status: "pending" | "sent";
     email: string;
     id?: string | undefined;
+    number?: string | undefined;
   };
 }) => {
   const searchParams = useSearchParams();
@@ -91,9 +94,9 @@ const AdminCell = ({
         >
           Delete Customer
         </DropdownMenuItem>
-        <DropdownMenuItem>Edit Customer</DropdownMenuItem>
+        <EditCustomer customer={customer} />
         <DropdownMenuSeparator />
-        <DropdownMenuItem>View customer</DropdownMenuItem>
+        <ViewCustomer customer={customer} />
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -153,7 +156,7 @@ export const userColumns: ColumnDef<Customer>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <ViewCustomer customer={row.original} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

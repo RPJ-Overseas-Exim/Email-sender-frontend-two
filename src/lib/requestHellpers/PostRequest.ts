@@ -6,7 +6,6 @@ export default async function PostRequest(url: string, data: any) {
   const { API_URL, API_VER } = process.env;
   if (!API_URL || !API_VER) return;
 
-  console.log(API_URL + API_VER + url);
   const res = await fetch(API_URL + API_VER + url, {
     method: "POST",
     ...headers(),
@@ -28,10 +27,15 @@ export async function Login(data: any) {
   });
 
   const resJson = await res.json();
-  cookieStore.set("Authentication", resJson.token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: true,
-  });
+  if (resJson?.token) {
+    const expire = (Number(process.env.JWT_EXPIRE) ?? 3) * 24 * 60 * 60;
+    console.log(expire);
+    cookieStore.set("Authentication", resJson.token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: true,
+      maxAge: expire,
+    });
+  }
   return resJson;
 }

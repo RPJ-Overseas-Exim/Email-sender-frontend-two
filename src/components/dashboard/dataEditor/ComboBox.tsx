@@ -46,6 +46,13 @@ export default function Combobox({
     queryFn: getProducts,
   });
 
+  const getCurrentProduct = () => {
+    return query.data?.find(
+      (product: { name: string; id: string }) =>
+        product.id === getProduct() || product.name === getProduct(),
+    );
+  };
+
   return (
     <div className="my-4 flex items-center space-x-2">
       <Popover open={open} onOpenChange={setOpen}>
@@ -56,20 +63,15 @@ export default function Combobox({
             aria-expanded={open}
             className="w-[200px] justify-between"
           >
-            {getProduct()
-              ? query.data?.find(
-                  (product: { name: string; id: string }) =>
-                    product.id === getProduct(),
-                )?.name
-              : "Select Product..."}
+            {getProduct() ? getCurrentProduct()?.name : "Select Product..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
           <Command>
-            <CommandInput placeholder="Search framework..." />
+            <CommandInput placeholder="Search Products..." />
             <CommandList>
-              <CommandEmpty>No framework found.</CommandEmpty>
+              <CommandEmpty>No Products found.</CommandEmpty>
               <CommandGroup>
                 {query.data?.map((product: { name: string; id: string }) => (
                   <CommandItem
@@ -77,14 +79,18 @@ export default function Combobox({
                     value={product.name}
                     id={product.id}
                     onSelect={() => {
-                      setProduct(product.id === getProduct() ? "" : product.id);
+                      setProduct(
+                        product.id === getCurrentProduct()?.id
+                          ? ""
+                          : product.id,
+                      );
                       setOpen(false);
                     }}
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4",
-                        getProduct() === product.name
+                        "mr-2 h-4 w-4 text-foreground",
+                        getProduct() === product.id
                           ? "opacity-100"
                           : "opacity-0",
                       )}

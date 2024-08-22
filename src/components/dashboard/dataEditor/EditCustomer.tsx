@@ -16,12 +16,15 @@ import Spinner from "@/components/ui/Spinner";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import PostRequest from "@/lib/requestHellpers/PostRequest";
 import ComboBox from "./ComboBox";
 import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
 import revalPath from "@/lib/serverActions/revalPath";
+import { Customer } from "@/lib/types/dataEditor/dataEditor";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import PutRequest from "@/lib/requestHellpers/PutRequest";
 
 const formSchema = z.object({
+  id: z.string(),
   name: z.string().min(3, "Name should be at least 3 letters long"),
   number: z.string().optional(),
   email: z.string().email(),
@@ -29,21 +32,22 @@ const formSchema = z.object({
   type: z.enum(["enquiry", "reorder"]),
 });
 
-export default function AddCustomer() {
-  const form = useForm<z.infer<typeof formSchema>>({
+export default function EditCustomer({ customer }: { customer: Customer }) {
+  const editForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       type: "enquiry",
+      ...customer,
     },
   });
 
   const handleSubmit = async (customer: z.infer<typeof formSchema>) => {
     try {
-      const res = await PostRequest("/customers/" + customer.type, {
+      const res = await PutRequest("/customers/" + customer.id, {
         customersData: [customer],
       });
       if (res.data) {
-        toast.success("Order Added successfully.");
+        toast.success("Order Edited successfully.");
         return revalPath("/dashboard");
       }
     } catch (error) {
@@ -52,43 +56,42 @@ export default function AddCustomer() {
   };
 
   const setProduct = (product: string) => {
-    form.setValue("productId", product);
+    editForm.setValue("productId", product);
   };
 
   const getProduct = () => {
-    return form.getValues("productId");
+    return editForm.getValues("productId");
   };
 
   return (
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button
+          <button
             type="button"
-            size="sm"
-            className="flex items-center gap-1 rounded-none border border-gray-400 bg-background text-foreground hover:border-gray-700 hover:bg-gray-700 hover:text-white"
-            aria-disabled={form.formState.isSubmitting}
-            disabled={form.formState.isSubmitting}
+            aria-disabled={editForm.formState.isSubmitting}
+            disabled={editForm.formState.isSubmitting}
+            className="w-full p-2 text-left text-sm hover:bg-muted"
           >
-            <span>Add Customer</span>
-            {form.formState.isSubmitting && <Spinner w="4" h="4" b="2" />}
-          </Button>
+            <span>Edit</span>
+            {editForm.formState.isSubmitting && <Spinner w="4" h="4" b="2" />}
+          </button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>New Order</DialogTitle>
+            <DialogTitle>Edit Order</DialogTitle>
             <DialogDescription>
-              Add a new order to the database and send an email.
+              Edit and update the order in the database.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <form onSubmit={editForm.handleSubmit(handleSubmit)}>
             <div className="my-4 flex items-center space-x-2">
               <div className="grid flex-1 gap-2">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" {...form.register("name")} />
-                {form.formState.errors.name && (
+                <Input id="name" {...editForm.register("name")} />
+                {editForm.formState.errors.name && (
                   <p className="m-0 text-sm text-red-400">
-                    {form.formState.errors.name.message}
+                    {editForm.formState.errors.name.message}
                   </p>
                 )}
               </div>
@@ -97,10 +100,10 @@ export default function AddCustomer() {
             <div className="my-4 flex items-center space-x-2">
               <div className="grid flex-1 gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" {...form.register("email")} />
-                {form.formState.errors.email && (
+                <Input id="email" {...editForm.register("email")} />
+                {editForm.formState.errors.email && (
                   <p className="m-0 text-sm text-red-400">
-                    {form.formState.errors.email.message}
+                    {editForm.formState.errors.email.message}
                   </p>
                 )}
               </div>
@@ -110,31 +113,33 @@ export default function AddCustomer() {
               <ComboBox setProduct={setProduct} getProduct={getProduct} />
               <TypeRadio
                 setType={(type: "enquiry" | "reorder") =>
-                  form.setValue("type", type)
+                  editForm.setValue("type", type)
                 }
-                getType={() => form.getValues("type")}
+                getType={() => editForm.getValues("type")}
               />
             </div>
 
             <div className="my-4 flex items-center space-x-2">
               <div className="grid flex-1 gap-2">
                 <Label htmlFor="number">Number</Label>
-                <Input id="number" {...form.register("number")} />
-                {form.formState.errors.number && (
+                <Input id="number" {...editForm.register("number")} />
+                {editForm.formState.errors.number && (
                   <p className="m-0 text-sm text-red-400">
-                    {form.formState.errors.number.message}
+                    {editForm.formState.errors.number.message}
                   </p>
                 )}
               </div>
             </div>
-            <Button
-              type="submit"
-              size="sm"
-              className="w-full bg-sky-500 px-3 text-white hover:bg-sky-700"
-              disabled={form.formState.isSubmitting}
-            >
-              <span>Add</span>
-            </Button>
+            <DropdownMenuItem>
+              <Button
+                type="submit"
+                size="sm"
+                className="w-full bg-sky-500 px-3 text-white hover:bg-sky-700"
+                disabled={editForm.formState.isSubmitting}
+              >
+                <span>Edit</span>
+              </Button>
+            </DropdownMenuItem>
           </form>
         </DialogContent>
       </Dialog>
