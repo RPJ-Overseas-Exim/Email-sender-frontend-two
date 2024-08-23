@@ -3,6 +3,7 @@ import { Template } from "@/lib/types/TemplateEditor";
 import TemplateCombobox from "@/components/dashboard/templateEditor/TemplateCombobox";
 import GetRequest from "@/lib/requestHellpers/GetRequest";
 
+export const dynamic = "force-dynamic";
 export default async function TemplateEditor() {
   const res = await GetRequest("/templates");
   let templates: Template[] | [];
