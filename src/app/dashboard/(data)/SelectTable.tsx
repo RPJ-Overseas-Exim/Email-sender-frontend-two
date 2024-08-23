@@ -18,7 +18,7 @@ export default function SelectTable({
   data,
   count,
 }: {
-  data: Customer[] | null;
+  data: Customer[] | null | [];
   count: number;
 }) {
   const searchParams = useSearchParams();
@@ -38,12 +38,13 @@ export default function SelectTable({
     setTab(Intab);
   };
 
-  if (isFetching || !data)
+  if (isFetching)
     return (
       <div className="space-between flex h-[calc(100dvh-172px)] items-center justify-center">
         <Spinner />
       </div>
     );
+
   return (
     <div>
       <div className="flex justify-between">
@@ -83,10 +84,18 @@ export default function SelectTable({
       </div>
 
       <div className="h-[calc(100dvh-291px)] overflow-auto lg:h-[calc(100dvh-220px)]">
-        {auth && auth.role === "admin" ? (
-          <CustomerTable columns={columns} data={data} />
+        {data ? (
+          <div>
+            {auth && auth.role === "admin" ? (
+              <CustomerTable columns={columns} data={data} />
+            ) : (
+              <UserTable columns={userColumns} data={data} />
+            )}
+          </div>
         ) : (
-          <UserTable columns={userColumns} data={data} />
+          <div className="flex h-full w-full items-center justify-center">
+            <Spinner />
+          </div>
         )}
       </div>
       <DashboardPagination count={count} />

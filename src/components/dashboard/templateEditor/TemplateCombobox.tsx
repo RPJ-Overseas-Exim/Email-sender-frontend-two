@@ -31,9 +31,13 @@ export default function TemplateCombobox({
   const [open, setOpen] = React.useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [template, setTemplate] = React.useState<string>(
-    searchParams.get("template") ?? "",
-  );
+  const [template, setTemplate] = React.useState<string>("");
+
+  React.useEffect(() => {
+    if (searchParams.get("template"))
+      setTemplate(searchParams.get("template") ?? "");
+    else setTemplate("");
+  }, [searchParams, setTemplate]);
 
   return (
     <div className="my-4 flex items-center space-x-2">
@@ -43,7 +47,7 @@ export default function TemplateCombobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-[200px] justify-between"
+            className="w-[200px] justify-between capitalize"
           >
             {template !== "" ? template : "Select Product..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -60,11 +64,13 @@ export default function TemplateCombobox({
                     id={currTemplate.id}
                     key={currTemplate.id}
                     value={currTemplate.name}
+                    className="capitalize"
                     onSelect={() => {
                       setOpen(false);
                       setTemplate(currTemplate.name);
                       const searchP = new URLSearchParams(searchParams);
                       searchP.set("template", currTemplate.name);
+                      searchP.set("type", currTemplate.type);
                       router.push("/dashboard/template?" + searchP.toString());
                     }}
                   >

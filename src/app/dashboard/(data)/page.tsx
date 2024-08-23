@@ -52,6 +52,8 @@ async function applyFilters(searchParams: { [x: string]: string }) {
       data = extractData(res.data);
       count = res.count;
       return { data, count };
+    } else {
+      return { data: [], count };
     }
   } catch (error) {
     console.log(error);

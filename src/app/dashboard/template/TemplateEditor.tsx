@@ -6,10 +6,12 @@ import GetRequest from "@/lib/requestHellpers/GetRequest";
 export default async function TemplateEditor() {
   const res = await GetRequest("/templates");
   let templates: Template[] | [];
+  let templateMap: { [name: string]: { [x: string]: string } } = {};
   if (res.data) {
     templates = res.data.map(
       (template: { name: string; body: string; subject: string }) => {
         const [type, name] = template.name.split("-");
+        templateMap[name] = { subject: template.subject, body: template.body };
         return { ...template, name, type };
       },
     );
@@ -19,7 +21,7 @@ export default async function TemplateEditor() {
   return (
     <section id="templateEditor">
       <TemplateCombobox templates={templates} />
-      <TemplateForm />
+      <TemplateForm templates={templateMap} />
     </section>
   );
 }
