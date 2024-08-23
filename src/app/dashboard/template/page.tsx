@@ -1,5 +1,6 @@
 import TemplateEditor from "./TemplateEditor";
 
+export const dynamic = "force-dynamic";
 export default async function page() {
   return (
     <section id="data-editor" className="data-editor mx-auto w-[96%]">
