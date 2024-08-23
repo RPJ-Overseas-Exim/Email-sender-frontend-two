@@ -22,12 +22,12 @@ export default function ImportCSV() {
     reader.onload = async (e: ProgressEvent<FileReader>) => {
       if (reader?.result) {
         const jsonFile = await csvToJson(String(reader.result));
-        const type = searchParams.get("tab") || "enquiry";
+        const type = searchParams.get("type") || "enquiry";
         try {
-          console.log(jsonFile);
           const res = await PostRequest("/customers/" + type, {
             customersData: jsonFile,
           });
+          console.log(res);
           if (res.data) {
             revalPath("/dashboard");
             toast.success("Customers added into " + type + " table");

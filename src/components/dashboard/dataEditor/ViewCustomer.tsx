@@ -25,7 +25,7 @@ export default function ViewCustomer({ customer }: { customer: Customer }) {
           <DialogTitle>{customer.name}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-start gap-2">
-          <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
+          <div className="flex w-full flex-col items-center justify-between gap-2 md:flex-row">
             <div className="w-full md:w-[70%]">
               <label
                 htmlFor="email"
@@ -58,7 +58,7 @@ export default function ViewCustomer({ customer }: { customer: Customer }) {
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
+          <div className="flex w-full flex-col items-center justify-between gap-2 md:flex-row">
             {customer?.number && (
               <div className="w-full md:w-[70%]">
                 <label
