@@ -1,6 +1,6 @@
 "use client";
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
-import { CustomerTable } from "@/components/dashboard/dataEditor/data-table";
+import CustomerTable from "@/components/dashboard/data-table";
 import {
   columns,
   userColumns,
@@ -27,9 +27,10 @@ export default function SelectTable({
   );
 
   const router = useRouter();
-  const { auth, isFetching } = useAuth();
+  const { auth } = useAuth();
 
   const handleTab = (Intab: "enquiry" | "reorder" | undefined = undefined) => {
+    console.log(auth);
     if (Intab === undefined) {
       router.push("/dashboard");
     } else {
@@ -37,13 +38,6 @@ export default function SelectTable({
     }
     setTab(Intab);
   };
-
-  if (isFetching)
-    return (
-      <div className="space-between flex h-[calc(100dvh-172px)] items-center justify-center">
-        <Spinner />
-      </div>
-    );
 
   return (
     <div>
@@ -84,9 +78,9 @@ export default function SelectTable({
       </div>
 
       <div className="h-[calc(100dvh-291px)] overflow-auto lg:h-[calc(100dvh-220px)]">
-        {data ? (
+        {auth?.login && data ? (
           <div>
-            {auth && auth.role === "admin" ? (
+            {auth?.role === "admin" ? (
               <CustomerTable columns={columns} data={data} />
             ) : (
               <UserTable columns={userColumns} data={data} />

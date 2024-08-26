@@ -30,7 +30,7 @@ const formSchema = z.object({
 
 export default function Login() {
   const router = useRouter();
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,17 +42,15 @@ export default function Login() {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const res = await login(data);
-      console.log(res);
-      if (res.token) {
+      if (res?.token) {
         setAuth({ login: true, role: res?.role || "user" });
-        router.push("/dashboard");
+        router.refresh();
       } else if (res.error) {
         toast.error(res.error);
         form.reset();
       }
     } catch (error) {
       console.log(error);
-      setAuth({ login: false, role: "" });
     }
   };
 

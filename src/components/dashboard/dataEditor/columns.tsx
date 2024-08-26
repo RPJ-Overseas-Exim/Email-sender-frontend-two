@@ -20,18 +20,7 @@ import EditCustomer from "./EditCustomer";
 import ViewCustomer from "./ViewCustomer";
 import { cn } from "@/lib/utils";
 
-const AdminCell = ({
-  customer,
-}: {
-  customer: {
-    name: string;
-    productId: string;
-    status: "pending" | "sent";
-    email: string;
-    id?: string | undefined;
-    number?: string | undefined;
-  };
-}) => {
+const AdminCell = ({ customer }: { customer: Customer }) => {
   const searchParams = useSearchParams();
   const undoDelete = async (data: Customer) => {
     try {

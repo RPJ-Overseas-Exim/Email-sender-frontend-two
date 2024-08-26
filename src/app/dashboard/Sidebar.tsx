@@ -8,15 +8,16 @@ import { usePathname, useRouter } from "next/navigation";
 import ThemeSwitch from "@/components/context/ThemeSwitch";
 import { Logout } from "@/lib/requestHellpers/GetRequest";
 import useAuth from "@/components/context/AuthProvider";
+import Spinner from "@/components/ui/Spinner";
 
 export default function Sidebar() {
   const path = usePathname();
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
     await Logout();
-    setAuth(undefined);
+    setAuth({ login: false, role: "" });
     router.push("/");
   };
 
@@ -45,15 +46,17 @@ export default function Sidebar() {
               <MdEditDocument /> <span>Template Editor</span>
             </Link>
           </li>
-          <li
-            className={
-              (path === "/dashboard/users" && "active--nav-item") || ""
-            }
-          >
-            <Link href="/dashboard/users" className="aside__nav-item">
-              <FaUsers /> <span>Users</span>
-            </Link>
-          </li>
+          {auth?.role === "admin" && (
+            <li
+              className={
+                (path === "/dashboard/users" && "active--nav-item") || ""
+              }
+            >
+              <Link href="/dashboard/users" className="aside__nav-item">
+                <FaUsers /> <span>Users</span>
+              </Link>
+            </li>
+          )}
           <li>
             <button
               type="button"
