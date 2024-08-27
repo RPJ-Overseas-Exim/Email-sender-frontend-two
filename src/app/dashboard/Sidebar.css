@@ -9,7 +9,7 @@
 
 .sidebar__title {
   display: none;
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   font-weight: bolder;
 }
 
@@ -109,5 +109,6 @@
 
   .sidebar__title {
     display: block;
+    font-size: var(--text-lg);
   }
 }

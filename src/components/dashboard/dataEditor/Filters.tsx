@@ -1,7 +1,7 @@
 "use client";
 import { FaFilter } from "react-icons/fa6";
 import { X } from "lucide-react";
-import { MouseEventHandler, ReactEventHandler, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -62,16 +62,16 @@ export default function Filters() {
   return (
     <section id="filters" className="ml-2 self-center">
       <button type="button" onClick={() => setOpen((prev) => !prev)}>
-        <FaFilter className="text-lg transition hover:text-foreground" />
+        <FaFilter className="text-base transition hover:text-foreground md:text-lg" />
       </button>
       <div
         className={cn(
-          "fixed left-0 top-0 z-[50] h-full w-[25%] border-r border-border bg-background transition duration-300",
+          "fixed bottom-0 left-0 top-0 z-[50] h-dvh w-full border-r border-border bg-background transition duration-300 md:w-[50%] lg:h-full lg:w-[25%]",
           open ? "translate-x-0" : "translate-x-[-100%]",
         )}
       >
         <aside className="filters-sidebar">
-          <div className="sidebar__header">
+          <div className="sidebar__header" style={{ display: "flex" }}>
             <h1 className="text-2xl font-bold text-foreground">Filters</h1>
             <div
               className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
