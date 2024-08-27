@@ -64,7 +64,7 @@ export default function ImportCSV() {
 
 const csvToJson = async (file: string) => {
   if (!file.length) return;
-  const jsonArray = file.split("\r\n"),
+  const jsonArray = file.split(/"\r\n" | "\n"/),
     nameIndex = jsonArray[0].split(",").indexOf("name"),
     emailIndex = jsonArray[0].split(",").indexOf("email"),
     numberIndex = jsonArray[0].split(",").indexOf("number"),
@@ -83,7 +83,7 @@ const csvToJson = async (file: string) => {
 
     for (const line of jsonArray.slice(1)) {
       const lineArray = line.split(",");
-      const name = lineArray[nameIndex],
+      const name = lineArray[nameIndex].replaceAll(/'"'|"\n" | "\r\n"/, ""),
         email = lineArray[emailIndex],
         product = lineArray[productIndex],
         number = lineArray[numberIndex];

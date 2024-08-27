@@ -14,53 +14,31 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Spinner from "@/components/ui/Spinner";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ComboBox from "./ComboBox";
-import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
 import revalPath from "@/lib/serverActions/revalPath";
-import { Customer } from "@/lib/types/dataEditor/dataEditor";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import UserZod, { User } from "@/lib/types/UserEditor";
 import PutRequest from "@/lib/requestHellpers/PutRequest";
 
-const formSchema = z.object({
-  id: z.string(),
-  name: z.string().min(3, "Name should be at least 3 letters long"),
-  number: z.string().optional(),
-  email: z.string().email(),
-  productId: z.string().min(4, "Product should be at least 4 letters long"),
-  type: z.enum(["enquiry", "reorder"]),
-});
-
-export default function EditCustomer({ customer }: { customer: Customer }) {
-  const editForm = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export default function EditUser({ user }: { user: User }) {
+  console.log(user);
+  const editForm = useForm<User>({
+    resolver: zodResolver(UserZod),
     defaultValues: {
-      type: "enquiry",
-      ...customer,
+      ...user,
     },
   });
 
-  const handleSubmit = async (customer: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (user: User) => {
     try {
-      const res = await PutRequest("/customers/" + customer.id, {
-        customersData: [customer],
-      });
-      if (res.data) {
-        toast.success("Order Edited successfully.");
-        return revalPath("/dashboard");
+      const res = await PutRequest("/users/" + user.id, { ...user });
+      console.log(res);
+      if (res?.data) {
+        toast.success("User Edited successfully.");
+        return revalPath("/dashboard/users");
       }
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const setProduct = (product: string) => {
-    editForm.setValue("productId", product);
-  };
-
-  const getProduct = () => {
-    return editForm.getValues("productId");
   };
 
   return (
@@ -88,10 +66,10 @@ export default function EditCustomer({ customer }: { customer: Customer }) {
             <div className="my-4 flex items-center space-x-2">
               <div className="grid flex-1 gap-2">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" {...editForm.register("name")} />
-                {editForm.formState.errors.name && (
+                <Input id="name" {...editForm.register("username")} />
+                {editForm.formState.errors.username && (
                   <p className="m-0 text-sm text-red-400">
-                    {editForm.formState.errors.name.message}
+                    {editForm.formState.errors.username.message}
                   </p>
                 )}
               </div>
@@ -109,37 +87,37 @@ export default function EditCustomer({ customer }: { customer: Customer }) {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <ComboBox setProduct={setProduct} getProduct={getProduct} />
-              <TypeRadio
-                setType={(type: "enquiry" | "reorder") =>
-                  editForm.setValue("type", type)
-                }
-                getType={() => editForm.getValues("type")}
-              />
-            </div>
-
             <div className="my-4 flex items-center space-x-2">
               <div className="grid flex-1 gap-2">
-                <Label htmlFor="number">Number</Label>
-                <Input id="number" {...editForm.register("number")} />
-                {editForm.formState.errors.number && (
+                <Label htmlFor="number">Password</Label>
+                <Input id="number" {...editForm.register("password")} />
+                {editForm.formState.errors.password && (
                   <p className="m-0 text-sm text-red-400">
-                    {editForm.formState.errors.number.message}
+                    {editForm.formState.errors.password.message}
                   </p>
                 )}
               </div>
             </div>
-            <DropdownMenuItem className="bg-transparent p-0">
-              <Button
-                type="submit"
-                size="sm"
-                className="w-full bg-sky-500 px-3 text-white hover:bg-sky-700"
-                disabled={editForm.formState.isSubmitting}
-              >
-                <span>Edit</span>
-              </Button>
-            </DropdownMenuItem>
+
+            <div className="my-4 flex items-center space-x-2">
+              <div className="grid flex-1 gap-2">
+                <Label htmlFor="role">Role</Label>
+                <Input id="role" {...editForm.register("role")} />
+                {editForm.formState.errors.role && (
+                  <p className="m-0 text-sm text-red-400">
+                    {editForm.formState.errors.role.message}
+                  </p>
+                )}
+              </div>
+            </div>
+            <Button
+              type="submit"
+              size="sm"
+              className="w-full bg-sky-500 px-3 text-white hover:bg-sky-700"
+              disabled={editForm.formState.isSubmitting}
+            >
+              <span>Edit</span>
+            </Button>
           </form>
         </DialogContent>
       </Dialog>

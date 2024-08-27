@@ -7,7 +7,7 @@ export default async function TemplateEditor() {
   const res = await GetRequest("/templates");
   let templates: Template[] | [];
   let templateMap: { [name: string]: { [x: string]: string } } = {};
-  if (res.data) {
+  if (res?.data) {
     templates = res.data.map(
       (template: { name: string; body: string; subject: string }) => {
         const [type, name] = template.name.split("-");

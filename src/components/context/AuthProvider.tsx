@@ -1,9 +1,9 @@
 "use client";
 import GetRequest from "@/lib/requestHellpers/GetRequest";
 import { useRouter } from "next/navigation";
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { type Dispatch } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 type Auth =
   | {
@@ -12,39 +12,36 @@ type Auth =
     }
   | undefined;
 const AuthContext = createContext<
-  undefined | { auth: Auth; setAuth: Dispatch<any>; isFetching: boolean }
+  undefined | { auth: Auth; setAuth: Dispatch<any>; isPending: boolean }
 >(undefined);
 
 export const AuthProvider = ({
   children,
 }: Readonly<{ children: React.ReactNode }>) => {
-  const router = useRouter();
-  // const [auth, setAuth] = useState<Auth>();
-
+  const [auth, setAuth] = useState<Auth>({ login: false, role: "" });
   const fetchRole = async () => {
-    return await GetRequest("/auth/role");
+    const res = await GetRequest("/auth/role");
+    if (res?.role) {
+      return { login: true, role: res.role };
+    }
+    return { login: false, role: "" };
   };
 
-  const qc = useQueryClient();
-  const query = useQuery({ queryKey: ["authContext"], queryFn: fetchRole });
-  const { mutate } = useMutation({
-    onMutate: (variables) => {
-      qc.setQueryData(["authContext"], () => variables);
-    },
+  const query = useQuery({
+    queryKey: ["authContext"],
+    queryFn: fetchRole,
+    staleTime: 0,
   });
 
-  // useEffect(() => {
-  // if (!query?.data?.role) {
-  //   mutate(undefined);
-  //   router.push("/");
-  // }
-  // }, [query?.data]);
+  useEffect(() => {
+    if (auth !== query.data) setAuth(query.data);
+  }, [query?.data]);
   return (
     <AuthContext.Provider
       value={{
-        auth: query.data,
-        setAuth: mutate,
-        isFetching: query.isFetching,
+        auth,
+        setAuth,
+        isPending: query.isPending,
       }}
     >
       {children}

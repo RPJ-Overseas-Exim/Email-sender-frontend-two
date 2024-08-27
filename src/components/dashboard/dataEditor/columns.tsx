@@ -19,19 +19,9 @@ import { useSearchParams } from "next/navigation";
 import EditCustomer from "./EditCustomer";
 import ViewCustomer from "./ViewCustomer";
 import { cn } from "@/lib/utils";
+import { HiArrowsUpDown } from "react-icons/hi2";
 
-const AdminCell = ({
-  customer,
-}: {
-  customer: {
-    name: string;
-    productId: string;
-    status: "pending" | "sent";
-    email: string;
-    id?: string | undefined;
-    number?: string | undefined;
-  };
-}) => {
+const AdminCell = ({ customer }: { customer: Customer }) => {
   const searchParams = useSearchParams();
   const undoDelete = async (data: Customer) => {
     try {
@@ -118,7 +108,18 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
+          className="p-0 px-1"
+        >
+          Status
+          <HiArrowsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const { status } = row.original;
       return (
@@ -156,7 +157,17 @@ export const userColumns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
+        >
+          Status
+          <HiArrowsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const { status } = row.original;
       return (

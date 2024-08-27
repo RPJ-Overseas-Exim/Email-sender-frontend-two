@@ -1,6 +1,6 @@
 "use client";
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
-import { CustomerTable } from "@/components/dashboard/dataEditor/data-table";
+import CustomerTable from "@/components/dashboard/data-table";
 import {
   columns,
   userColumns,
@@ -13,6 +13,7 @@ import { UserTable } from "@/components/dashboard/dataEditor/user-data-table";
 import Spinner from "@/components/ui/Spinner";
 import AddCustomer from "@/components/dashboard/dataEditor/AddCustomer";
 import DashboardPagination from "@/components/dashboard/dataEditor/DashboardPagination";
+import Filters from "@/components/dashboard/dataEditor/Filters";
 
 export default function SelectTable({
   data,
@@ -27,7 +28,7 @@ export default function SelectTable({
   );
 
   const router = useRouter();
-  const { auth, isFetching } = useAuth();
+  const { auth } = useAuth();
 
   const handleTab = (Intab: "enquiry" | "reorder" | undefined = undefined) => {
     if (Intab === undefined) {
@@ -37,13 +38,6 @@ export default function SelectTable({
     }
     setTab(Intab);
   };
-
-  if (isFetching)
-    return (
-      <div className="space-between flex h-[calc(100dvh-172px)] items-center justify-center">
-        <Spinner />
-      </div>
-    );
 
   return (
     <div>
@@ -79,14 +73,15 @@ export default function SelectTable({
           >
             Reorder
           </button>
+          <Filters />
         </div>
         <AddCustomer />
       </div>
 
       <div className="h-[calc(100dvh-291px)] overflow-auto lg:h-[calc(100dvh-220px)]">
-        {data ? (
+        {auth?.login && data ? (
           <div>
-            {auth && auth.role === "admin" ? (
+            {auth?.role === "admin" ? (
               <CustomerTable columns={columns} data={data} />
             ) : (
               <UserTable columns={userColumns} data={data} />
