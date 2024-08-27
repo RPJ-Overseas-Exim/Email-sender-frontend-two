@@ -130,7 +130,7 @@ export default function EditCustomer({ customer }: { customer: Customer }) {
                 )}
               </div>
             </div>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="bg-transparent p-0">
               <Button
                 type="submit"
                 size="sm"

@@ -13,6 +13,7 @@ import { UserTable } from "@/components/dashboard/dataEditor/user-data-table";
 import Spinner from "@/components/ui/Spinner";
 import AddCustomer from "@/components/dashboard/dataEditor/AddCustomer";
 import DashboardPagination from "@/components/dashboard/dataEditor/DashboardPagination";
+import Filters from "@/components/dashboard/dataEditor/Filters";
 
 export default function SelectTable({
   data,
@@ -30,7 +31,6 @@ export default function SelectTable({
   const { auth } = useAuth();
 
   const handleTab = (Intab: "enquiry" | "reorder" | undefined = undefined) => {
-    console.log(auth);
     if (Intab === undefined) {
       router.push("/dashboard");
     } else {
@@ -73,6 +73,7 @@ export default function SelectTable({
           >
             Reorder
           </button>
+          <Filters />
         </div>
         <AddCustomer />
       </div>

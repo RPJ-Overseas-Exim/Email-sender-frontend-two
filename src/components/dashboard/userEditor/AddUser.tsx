@@ -48,7 +48,7 @@ export default function AddUser() {
             aria-disabled={form.formState.isSubmitting}
             disabled={form.formState.isSubmitting}
           >
-            <span>Add Customer</span>
+            <span>Add User</span>
             {form.formState.isSubmitting && <Spinner w="4" h="4" b="2" />}
           </Button>
         </DialogTrigger>

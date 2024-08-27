@@ -8,7 +8,6 @@ import { usePathname, useRouter } from "next/navigation";
 import ThemeSwitch from "@/components/context/ThemeSwitch";
 import { Logout } from "@/lib/requestHellpers/GetRequest";
 import useAuth from "@/components/context/AuthProvider";
-import Spinner from "@/components/ui/Spinner";
 
 export default function Sidebar() {
   const path = usePathname();
