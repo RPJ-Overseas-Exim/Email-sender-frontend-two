@@ -66,7 +66,7 @@ export default function AddCustomer() {
           <Button
             type="button"
             size="sm"
-            className="flex items-center gap-1 rounded-none border border-gray-400 bg-background text-foreground hover:border-gray-700 hover:bg-gray-700 hover:text-white"
+            className="flex items-center gap-1 rounded-none border border-gray-400 bg-background px-3 py-1 text-xs text-foreground hover:border-gray-700 hover:bg-gray-700 hover:text-white md:text-base lg:px-4 lg:py-2"
             aria-disabled={form.formState.isSubmitting}
             disabled={form.formState.isSubmitting}
           >

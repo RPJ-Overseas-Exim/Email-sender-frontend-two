@@ -42,7 +42,7 @@ export default function DashboardPagination({ count }: { count: number }) {
           />
         </PaginationItem>
 
-        {page - 2 >= 1 && (
+        {page - 2 >= 0 && (
           <PaginationItem>
             <PaginationLink
               onClick={() => {

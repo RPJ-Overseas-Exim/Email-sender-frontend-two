@@ -14,6 +14,7 @@ import Spinner from "@/components/ui/Spinner";
 import AddCustomer from "@/components/dashboard/dataEditor/AddCustomer";
 import DashboardPagination from "@/components/dashboard/dataEditor/DashboardPagination";
 import Filters from "@/components/dashboard/dataEditor/Filters";
+import ThemeSwitch from "@/components/context/ThemeSwitch";
 
 export default function SelectTable({
   data,
@@ -41,8 +42,8 @@ export default function SelectTable({
 
   return (
     <div>
-      <div className="flex justify-between">
-        <div className="mb-4 flex items-start text-sm font-semibold text-muted-foreground">
+      <div className="mb-2 flex items-center justify-between">
+        <div className="flex items-start text-xs font-semibold text-muted-foreground md:text-sm">
           <button
             type="button"
             className={cn(
@@ -74,11 +75,14 @@ export default function SelectTable({
             Reorder
           </button>
           <Filters />
+          <div className="ml-4 mt-[-2px] self-center lg:hidden">
+            <ThemeSwitch />
+          </div>
         </div>
         <AddCustomer />
       </div>
 
-      <div className="h-[calc(100dvh-291px)] overflow-auto lg:h-[calc(100dvh-220px)]">
+      <div className="h-[calc(100dvh-277px)] overflow-auto lg:h-[calc(100dvh-220px)]">
         {auth?.login && data ? (
           <div>
             {auth?.role === "admin" ? (

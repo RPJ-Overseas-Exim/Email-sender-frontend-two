@@ -45,10 +45,10 @@ export default function ImportCSV() {
   return (
     <div>
       <label
-        className="flex items-center gap-1 border border-gray-400 bg-background px-4 py-2 text-foreground hover:border-gray-700 hover:bg-gray-700 hover:text-white"
+        className="flex items-center gap-1 border border-gray-400 bg-background px-3 py-2 text-xs text-foreground hover:border-gray-700 hover:bg-gray-700 hover:text-white lg:px-4 lg:py-2 lg:text-base"
         htmlFor="import-csv"
       >
-        <CiImport className="text-lg" />
+        <CiImport className="h-3 w-3 lg:h-4 lg:w-4" />
         <span className="inline-block">Import CSV</span>
       </label>
       <input
