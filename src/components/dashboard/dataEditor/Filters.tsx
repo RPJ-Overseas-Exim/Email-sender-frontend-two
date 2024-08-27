@@ -1,7 +1,7 @@
 "use client";
 import { FaFilter } from "react-icons/fa6";
 import { X } from "lucide-react";
-import { MouseEventHandler, ReactEventHandler, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";

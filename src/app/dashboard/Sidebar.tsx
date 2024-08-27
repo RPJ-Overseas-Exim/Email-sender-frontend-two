@@ -8,6 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import ThemeSwitch from "@/components/context/ThemeSwitch";
 import { Logout } from "@/lib/requestHellpers/GetRequest";
 import useAuth from "@/components/context/AuthProvider";
+import { FaClock } from "react-icons/fa";
 
 export default function Sidebar() {
   const path = usePathname();
@@ -42,19 +43,31 @@ export default function Sidebar() {
             }
           >
             <Link href="/dashboard/template" className="aside__nav-item">
-              <MdEditDocument /> <span>Template Editor</span>
+              <MdEditDocument /> <span>Template</span>
             </Link>
           </li>
           {auth?.role === "admin" && (
-            <li
-              className={
-                (path === "/dashboard/users" && "active--nav-item") || ""
-              }
-            >
-              <Link href="/dashboard/users" className="aside__nav-item">
-                <FaUsers /> <span>Users</span>
-              </Link>
-            </li>
+            <>
+              <li
+                className={
+                  (path === "/dashboard/scheduler" && "active--nav-item") || ""
+                }
+              >
+                <Link href="/dashboard/scheduler" className="aside__nav-item">
+                  <FaClock /> <span>Scheduler</span>
+                </Link>
+              </li>
+
+              <li
+                className={
+                  (path === "/dashboard/users" && "active--nav-item") || ""
+                }
+              >
+                <Link href="/dashboard/users" className="aside__nav-item">
+                  <FaUsers /> <span>Users</span>
+                </Link>
+              </li>
+            </>
           )}
           <li>
             <button

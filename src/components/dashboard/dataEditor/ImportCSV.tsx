@@ -49,7 +49,9 @@ export default function ImportCSV() {
         htmlFor="import-csv"
       >
         <CiImport className="h-3 w-3 lg:h-4 lg:w-4" />
-        <span className="inline-block">Import CSV</span>
+        <span className="inline-block">
+          Import <span className="hidden md:inline">CSV </span>
+        </span>
       </label>
       <input
         type="file"
