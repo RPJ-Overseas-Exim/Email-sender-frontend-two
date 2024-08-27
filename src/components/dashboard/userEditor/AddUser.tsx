@@ -14,49 +14,27 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Spinner from "@/components/ui/Spinner";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PostRequest from "@/lib/requestHellpers/PostRequest";
-import ComboBox from "./ComboBox";
-import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
 import revalPath from "@/lib/serverActions/revalPath";
+import UserZod, { User } from "@/lib/types/UserEditor";
 
-const formSchema = z.object({
-  name: z.string().min(3, "Name should be at least 3 letters long"),
-  number: z.string().optional(),
-  email: z.string().email(),
-  productId: z.string().min(4, "Product should be at least 4 letters long"),
-  type: z.enum(["enquiry", "reorder"]),
-});
-
-export default function AddCustomer() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      type: "enquiry",
-    },
+export default function AddUser() {
+  const form = useForm<User>({
+    resolver: zodResolver(UserZod),
   });
 
-  const handleSubmit = async (customer: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (user: User) => {
+    console.log(user);
     try {
-      const res = await PostRequest("/customers/" + customer.type, {
-        customersData: [customer],
-      });
+      const res = await PostRequest("/users", { ...user });
       if (res.data) {
-        toast.success("Order Added successfully.");
-        return revalPath("/dashboard");
+        toast.success("User Added successfully.");
+        return revalPath("/dashboard/users");
       }
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const setProduct = (product: string) => {
-    form.setValue("productId", product);
-  };
-
-  const getProduct = () => {
-    return form.getValues("productId");
   };
 
   return (
@@ -70,7 +48,7 @@ export default function AddCustomer() {
             aria-disabled={form.formState.isSubmitting}
             disabled={form.formState.isSubmitting}
           >
-            <span>Add Customer</span>
+            <span>Add User</span>
             {form.formState.isSubmitting && <Spinner w="4" h="4" b="2" />}
           </Button>
         </DialogTrigger>
@@ -85,10 +63,10 @@ export default function AddCustomer() {
             <div className="my-4 flex items-center space-x-2">
               <div className="grid flex-1 gap-2">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" {...form.register("name")} />
-                {form.formState.errors.name && (
+                <Input id="name" {...form.register("username")} />
+                {form.formState.errors.username && (
                   <p className="m-0 text-sm text-red-400">
-                    {form.formState.errors.name.message}
+                    {form.formState.errors.username.message}
                   </p>
                 )}
               </div>
@@ -106,23 +84,13 @@ export default function AddCustomer() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <ComboBox setProduct={setProduct} getProduct={getProduct} />
-              <TypeRadio
-                setType={(type: "enquiry" | "reorder") =>
-                  form.setValue("type", type)
-                }
-                getType={() => form.getValues("type")}
-              />
-            </div>
-
             <div className="my-4 flex items-center space-x-2">
               <div className="grid flex-1 gap-2">
-                <Label htmlFor="number">Number</Label>
-                <Input id="number" {...form.register("number")} />
-                {form.formState.errors.number && (
+                <Label htmlFor="number">Password</Label>
+                <Input id="number" {...form.register("password")} />
+                {form.formState.errors.password && (
                   <p className="m-0 text-sm text-red-400">
-                    {form.formState.errors.number.message}
+                    {form.formState.errors.password.message}
                   </p>
                 )}
               </div>

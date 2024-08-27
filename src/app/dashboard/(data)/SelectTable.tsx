@@ -1,11 +1,11 @@
 "use client";
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
-import { CustomerTable } from "@/components/dashboard/dataEditor/data-table";
+import CustomerTable from "@/components/dashboard/data-table";
 import {
   columns,
   userColumns,
 } from "@/components/dashboard/dataEditor/columns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSearchParams, useRouter } from "next/navigation";
 import useAuth from "@/components/context/AuthProvider";
@@ -13,12 +13,13 @@ import { UserTable } from "@/components/dashboard/dataEditor/user-data-table";
 import Spinner from "@/components/ui/Spinner";
 import AddCustomer from "@/components/dashboard/dataEditor/AddCustomer";
 import DashboardPagination from "@/components/dashboard/dataEditor/DashboardPagination";
+import Filters from "@/components/dashboard/dataEditor/Filters";
 
 export default function SelectTable({
   data,
   count,
 }: {
-  data: Customer[];
+  data: Customer[] | null | [];
   count: number;
 }) {
   const searchParams = useSearchParams();
@@ -29,25 +30,15 @@ export default function SelectTable({
   const router = useRouter();
   const { auth } = useAuth();
 
-  const handleTab = (tab: "enquiry" | "reorder" | undefined = undefined) => {
-    setTab(tab);
-    if (tab === undefined) return router.push("/dashboard?offset=1");
-    router.push("/dashboard" + "?type=" + tab + "&offset=1");
-  };
-  useEffect(() => {
-    if (searchParams.get("enquiry")) {
-      setTab("enquiry");
-    } else if (searchParams.get("reorder")) {
-      setTab("reorder");
+  const handleTab = (Intab: "enquiry" | "reorder" | undefined = undefined) => {
+    if (Intab === undefined) {
+      router.push("/dashboard");
+    } else {
+      router.push("/dashboard" + "?type=" + Intab);
     }
-  }, [setTab]);
+    setTab(Intab);
+  };
 
-  if (auth === undefined)
-    return (
-      <div className="space-between flex h-[calc(100dvh-172px)] items-center justify-center">
-        <Spinner />
-      </div>
-    );
   return (
     <div>
       <div className="flex justify-between">
@@ -58,7 +49,7 @@ export default function SelectTable({
               "px-2 py-1 hover:bg-muted",
               tab === undefined && "dataTable__tab--active",
             )}
-            onClick={() => handleTab(undefined)}
+            onClick={() => handleTab()}
           >
             All
           </button>
@@ -82,15 +73,24 @@ export default function SelectTable({
           >
             Reorder
           </button>
+          <Filters />
         </div>
         <AddCustomer />
       </div>
 
-      <div className="h-[calc(100dvh-220px)] overflow-auto">
-        {auth && auth.role === "admin" ? (
-          <CustomerTable columns={columns} data={data} />
+      <div className="h-[calc(100dvh-291px)] overflow-auto lg:h-[calc(100dvh-220px)]">
+        {auth?.login && data ? (
+          <div>
+            {auth?.role === "admin" ? (
+              <CustomerTable columns={columns} data={data} />
+            ) : (
+              <UserTable columns={userColumns} data={data} />
+            )}
+          </div>
         ) : (
-          <UserTable columns={userColumns} data={data} />
+          <div className="flex h-full w-full items-center justify-center">
+            <Spinner />
+          </div>
         )}
       </div>
       <DashboardPagination count={count} />

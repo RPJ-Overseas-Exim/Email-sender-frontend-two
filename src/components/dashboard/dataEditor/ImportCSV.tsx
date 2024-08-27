@@ -22,16 +22,12 @@ export default function ImportCSV() {
     reader.onload = async (e: ProgressEvent<FileReader>) => {
       if (reader?.result) {
         const jsonFile = await csvToJson(String(reader.result));
-        const type = searchParams.get("tab") || "enquiry";
+        const type = searchParams.get("type") || "enquiry";
         try {
-          // console.log(
-          //   JSON.stringify({
-          //     customersData: jsonFile,
-          //   }),
-          // );
           const res = await PostRequest("/customers/" + type, {
             customersData: jsonFile,
           });
+          console.log(res);
           if (res.data) {
             revalPath("/dashboard");
             toast.success("Customers added into " + type + " table");
@@ -68,7 +64,7 @@ export default function ImportCSV() {
 
 const csvToJson = async (file: string) => {
   if (!file.length) return;
-  const jsonArray = file.split("\n"),
+  const jsonArray = file.split(/"\r\n" | "\n"/),
     nameIndex = jsonArray[0].split(",").indexOf("name"),
     emailIndex = jsonArray[0].split(",").indexOf("email"),
     numberIndex = jsonArray[0].split(",").indexOf("number"),
@@ -87,10 +83,11 @@ const csvToJson = async (file: string) => {
 
     for (const line of jsonArray.slice(1)) {
       const lineArray = line.split(",");
-      const name = lineArray[nameIndex],
+      const name = lineArray[nameIndex].replaceAll(/'"'|"\n" | "\r\n"/, ""),
         email = lineArray[emailIndex],
         product = lineArray[productIndex],
         number = lineArray[numberIndex];
+
       const jsonObj = {
         name,
         email,

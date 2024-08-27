@@ -19,39 +19,25 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import GetRequest from "@/lib/requestHellpers/GetRequest";
-import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import type { Template } from "@/lib/types/TemplateEditor";
+import { useRouter } from "next/navigation";
 
-export default function Combobox({
-  setProduct,
-  getProduct,
+export default function TemplateCombobox({
+  templates,
 }: {
-  setProduct: (product: string) => void;
-  getProduct: () => string;
+  templates: Template[] | [];
 }) {
   const [open, setOpen] = React.useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [template, setTemplate] = React.useState<string>("");
 
-  const getProducts = async () => {
-    try {
-      const res = await GetRequest("/products");
-      if (res.data) return res.data;
-      return [];
-    } catch (error) {
-      console.error("Fetch Failed", error);
-    }
-  };
-
-  const query = useQuery({
-    queryKey: ["productDetails"],
-    queryFn: getProducts,
-  });
-
-  const getCurrentProduct = () => {
-    return query.data?.find(
-      (product: { name: string; id: string }) =>
-        product.id === getProduct() || product.name === getProduct(),
-    );
-  };
+  React.useEffect(() => {
+    if (searchParams.get("template"))
+      setTemplate(searchParams.get("template") ?? "");
+    else setTemplate("");
+  }, [searchParams, setTemplate]);
 
   return (
     <div className="my-4 flex items-center space-x-2">
@@ -61,9 +47,9 @@ export default function Combobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-[200px] justify-between"
+            className="w-[200px] justify-between capitalize"
           >
-            {getProduct() ? getCurrentProduct()?.name : "Select Product..."}
+            {template !== "" ? template : "Select Product..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -73,29 +59,30 @@ export default function Combobox({
             <CommandList>
               <CommandEmpty>No Products found.</CommandEmpty>
               <CommandGroup>
-                {query.data?.map((product: { name: string; id: string }) => (
+                {templates.map((currTemplate: Template) => (
                   <CommandItem
-                    key={product.name}
-                    value={product.name}
-                    id={product.id}
+                    id={currTemplate.id}
+                    key={currTemplate.id}
+                    value={currTemplate.name}
+                    className="capitalize"
                     onSelect={() => {
-                      setProduct(
-                        product.id === getCurrentProduct()?.id
-                          ? ""
-                          : product.id,
-                      );
                       setOpen(false);
+                      setTemplate(currTemplate.name);
+                      const searchP = new URLSearchParams(searchParams);
+                      searchP.set("template", currTemplate.name);
+                      searchP.set("type", currTemplate.type);
+                      router.push("/dashboard/template?" + searchP.toString());
                     }}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4 text-foreground",
-                        getProduct() === product.id
+                        currTemplate.name === template
                           ? "opacity-100"
                           : "opacity-0",
                       )}
                     />
-                    {product.name}
+                    {currTemplate.name}
                   </CommandItem>
                 ))}
               </CommandGroup>

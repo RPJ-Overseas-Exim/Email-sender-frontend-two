@@ -4,18 +4,20 @@ import { MdEditDocument } from "react-icons/md";
 import { TbTableImport, TbLogout } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ThemeSwitch from "@/components/context/ThemeSwitch";
 import { Logout } from "@/lib/requestHellpers/GetRequest";
 import useAuth from "@/components/context/AuthProvider";
 
 export default function Sidebar() {
   const path = usePathname();
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
+  const router = useRouter();
 
   const handleLogout = async () => {
-    setAuth({ login: false, role: "" });
     await Logout();
+    setAuth({ login: false, role: "" });
+    router.push("/");
   };
 
   return (
@@ -43,15 +45,17 @@ export default function Sidebar() {
               <MdEditDocument /> <span>Template Editor</span>
             </Link>
           </li>
-          <li
-            className={
-              (path === "/dashboard/users" && "active--nav-item") || ""
-            }
-          >
-            <Link href="/dashboard/users" className="aside__nav-item">
-              <FaUsers /> <span>Users</span>
-            </Link>
-          </li>
+          {auth?.role === "admin" && (
+            <li
+              className={
+                (path === "/dashboard/users" && "active--nav-item") || ""
+              }
+            >
+              <Link href="/dashboard/users" className="aside__nav-item">
+                <FaUsers /> <span>Users</span>
+              </Link>
+            </li>
+          )}
           <li>
             <button
               type="button"

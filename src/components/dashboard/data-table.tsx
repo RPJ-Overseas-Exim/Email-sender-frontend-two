@@ -21,7 +21,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function CustomerTable<TData, TValue>({
+export default function CustomerTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {

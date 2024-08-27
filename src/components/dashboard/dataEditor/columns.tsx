@@ -16,18 +16,12 @@ import { toast } from "sonner";
 import revalPath from "@/lib/serverActions/revalPath";
 import PostRequest from "@/lib/requestHellpers/PostRequest";
 import { useSearchParams } from "next/navigation";
+import EditCustomer from "./EditCustomer";
+import ViewCustomer from "./ViewCustomer";
+import { cn } from "@/lib/utils";
+import { HiArrowsUpDown } from "react-icons/hi2";
 
-const AdminCell = ({
-  customer,
-}: {
-  customer: {
-    name: string;
-    productId: string;
-    status: "pending" | "sent";
-    email: string;
-    id?: string | undefined;
-  };
-}) => {
+const AdminCell = ({ customer }: { customer: Customer }) => {
   const searchParams = useSearchParams();
   const undoDelete = async (data: Customer) => {
     try {
@@ -56,7 +50,6 @@ const AdminCell = ({
     if (!id) return;
     const res = await DeleteRequest("/customers/" + id);
     if (res.data) {
-      console.log(res.data);
       const data = res.data;
       toast(res.message, {
         action: {
@@ -92,9 +85,9 @@ const AdminCell = ({
         >
           Delete Customer
         </DropdownMenuItem>
-        <DropdownMenuItem>Edit Customer</DropdownMenuItem>
+        <EditCustomer customer={customer} />
         <DropdownMenuSeparator />
-        <DropdownMenuItem>View customer</DropdownMenuItem>
+        <ViewCustomer customer={customer} />
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -115,7 +108,34 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
+          className="p-0 px-1"
+        >
+          Status
+          <HiArrowsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const { status } = row.original;
+      return (
+        <p
+          id="number"
+          className={cn(
+            "flex w-fit items-center gap-2 rounded-sm border px-2",
+            status === "pending"
+              ? "border-red-600 text-red-600"
+              : "border-green-600 text-green-600",
+          )}
+        >
+          {status}
+        </p>
+      );
+    },
   },
   {
     id: "actions",
@@ -137,7 +157,33 @@ export const userColumns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
+        >
+          Status
+          <HiArrowsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const { status } = row.original;
+      return (
+        <p
+          id="number"
+          className={cn(
+            "flex w-fit items-center gap-2 rounded-sm border px-2",
+            status === "pending"
+              ? "border-red-600 text-red-600"
+              : "border-green-600 text-green-600",
+          )}
+        >
+          {status}
+        </p>
+      );
+    },
   },
   {
     id: "actions",
@@ -154,7 +200,7 @@ export const userColumns: ColumnDef<Customer>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <ViewCustomer customer={row.original} />
           </DropdownMenuContent>
         </DropdownMenu>
       );
