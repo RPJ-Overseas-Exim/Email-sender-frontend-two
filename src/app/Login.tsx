@@ -19,6 +19,7 @@ import { Login as login } from "@/lib/requestHellpers/PostRequest";
 import { useRouter } from "next/navigation";
 import useAuth from "@/components/context/AuthProvider";
 import { toast } from "sonner";
+import ShowHidePassword from "@/components/ui/ShowHidePassword";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -93,7 +94,7 @@ export default function Login() {
                 <FormItem className="w-full">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your password" {...field} />
+                    <ShowHidePassword field={field} />
                   </FormControl>
                   <FormMessage />
                   <FormDescription className="text-sm text-deepBlue underline">
