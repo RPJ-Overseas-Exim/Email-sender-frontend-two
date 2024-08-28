@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import Spinner from "@/components/ui/Spinner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import PostRequest from "@/lib/requestHellpers/PostRequest";
+import PostRequest from "@/lib/requestHelpers/PostRequest";
 import revalPath from "@/lib/serverActions/revalPath";
 import UserZod, { User } from "@/lib/types/UserEditor";
 

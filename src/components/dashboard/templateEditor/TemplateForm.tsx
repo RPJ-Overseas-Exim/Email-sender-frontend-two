@@ -16,14 +16,14 @@ import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { Textarea } from "@/components/ui/textarea";
 import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
-import PostRequest from "@/lib/requestHellpers/PostRequest";
+import PostRequest from "@/lib/requestHelpers/PostRequest";
 import { Template, TemplateZod } from "@/lib/types/TemplateEditor";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import PutRequest from "@/lib/requestHellpers/PutRequest";
+import PutRequest from "@/lib/requestHelpers/PutRequest";
 import revalPath from "@/lib/serverActions/revalPath";
 import { useRouter } from "next/navigation";
-import DeleteRequest from "@/lib/requestHellpers/DeleteRequest";
+import DeleteRequest from "@/lib/requestHelpers/DeleteRequest";
 
 export default function TemplateForm({
   templates,
@@ -57,6 +57,7 @@ export default function TemplateForm({
       }
       if (res.data) {
         revalPath("/dashboard/template");
+        form.reset();
         router.push("/dashboard/template");
         toast.success(res.message);
       } else if (res.error) toast.error(res.error);

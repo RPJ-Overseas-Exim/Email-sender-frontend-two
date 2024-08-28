@@ -1,4 +1,4 @@
-import { User } from "@/lib/types/UserEditor";
+"use client";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
   DropdownMenu,
@@ -8,22 +8,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import ViewUser from "./ViewUser";
 import { Button } from "@/components/ui/button";
 import { IoIosMore } from "react-icons/io";
-import PostRequest from "@/lib/requestHelpers/PostRequest";
 import { toast } from "sonner";
 import revalPath from "@/lib/serverActions/revalPath";
 import DeleteRequest from "@/lib/requestHelpers/DeleteRequest";
-import EditUser from "./EditUser";
+import { Scheduler } from "@/lib/types/Scheduler";
+import PutRequest from "@/lib/requestHelpers/PutRequest";
+import EditSchedule from "./EditSchedule";
 
-const AdminCell = ({ user }: { user: User }) => {
-  const undoDelete = async (data: User) => {
+const ScheduleCell = ({ schedule }: { schedule: Scheduler }) => {
+  const reschedule = async (type: string) => {
     try {
-      const undoRes = await PostRequest("/users", { ...data });
+      const undoRes = await PutRequest("/schedule/", type);
       console.log(undoRes);
       if (undoRes.data) {
-        toast.success("Operation undone.");
+        toast.success("Operation undone");
       }
     } catch (error) {
       console.error("Error while deleting user: ", error);
@@ -33,23 +33,22 @@ const AdminCell = ({ user }: { user: User }) => {
     }
   };
 
-  const deleteUser = async (id: string | undefined) => {
-    if (!id) return;
-    const res = await DeleteRequest("/users/" + id);
-    if (res.data) {
-      const data = res.data;
+  const stopSchedule = async (type: string | undefined) => {
+    if (!type) return;
+    const res = await DeleteRequest("/schedule?type=" + type);
+    if (res?.message) {
       toast(res.message, {
         action: {
           label: "Undo",
-          onClick: () => undoDelete(data),
+          onClick: () => reschedule(type),
         },
       });
     }
     if (res.error) {
       toast.error(res.error);
     }
-    revalPath("/dashboard/users");
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -60,44 +59,38 @@ const AdminCell = ({ user }: { user: User }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem
-          onClick={() => navigator.clipboard.writeText(user.email)}
-        >
-          Copy Email
-        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <EditSchedule schedule={schedule} />
         <DropdownMenuItem
           onClick={() => {
-            deleteUser(user.id);
+            stopSchedule(schedule.type);
           }}
         >
-          Delete User
+          Pause Schedule
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <EditUser user={user} />
-        <ViewUser user={user} />
       </DropdownMenuContent>
     </DropdownMenu>
   );
 };
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Scheduler>[] = [
   {
-    accessorKey: "username",
-    header: "Username",
+    accessorKey: "type",
+    header: "Name",
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "hour",
+    header: "Hour",
   },
   {
-    accessorKey: "role",
-    header: "Role",
+    accessorKey: "minute",
+    header: "Minute",
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const user = row.original;
-      return <AdminCell user={user} />;
+      const schedule = row.original;
+      return <ScheduleCell schedule={schedule} />;
     },
   },
 ];

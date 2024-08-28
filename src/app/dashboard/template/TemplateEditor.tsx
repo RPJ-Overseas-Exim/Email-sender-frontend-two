@@ -1,7 +1,7 @@
 import TemplateForm from "@/components/dashboard/templateEditor/TemplateForm";
 import { Template } from "@/lib/types/TemplateEditor";
 import TemplateCombobox from "@/components/dashboard/templateEditor/TemplateCombobox";
-import GetRequest from "@/lib/requestHellpers/GetRequest";
+import GetRequest from "@/lib/requestHelpers/GetRequest";
 
 export default async function TemplateEditor() {
   const res = await GetRequest("/templates");

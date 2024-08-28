@@ -9,6 +9,7 @@ import { DatePicker } from "./DatePicker";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 function FilterTitle({ title }: { title: string }) {
   return <h3 className="text-base font-bold capitalize">{title}</h3>;
@@ -27,10 +28,10 @@ export default function Filters() {
   const [filters, setFilters] = useState({
     limit: Number(searchParams.get("limit")) ?? 10,
     startDate: searchParams.get("startDate")
-      ? new Date(new Date().setDate(Number(searchParams.get("startDate"))))
+      ? new Date(searchParams.get("startDate") ?? "")
       : undefined,
     endDate: searchParams.get("endDate")
-      ? new Date(new Date().setDate(Number(searchParams.get("endDate"))))
+      ? new Date(searchParams.get("startDate") ?? "")
       : undefined,
   });
 
@@ -47,9 +48,13 @@ export default function Filters() {
         if (!(value instanceof Date)) continue;
         SParams.set(
           query,
-          `${value.getFullYear()}-${value.getMonth()}-${value.getDate()}`,
+          `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`,
         );
         continue;
+      }
+      if (query === "limit" && Number(value) > 200) {
+        toast.error("Limit cannot exceed 200");
+        return;
       }
       SParams.set(query, String(value));
     }

@@ -21,7 +21,7 @@ import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
 import revalPath from "@/lib/serverActions/revalPath";
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import PutRequest from "@/lib/requestHellpers/PutRequest";
+import PutRequest from "@/lib/requestHelpers/PutRequest";
 
 const formSchema = z.object({
   id: z.string(),

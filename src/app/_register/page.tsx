@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { PoppinsHeading } from "@/lib/fonts";
-import PostRequest from "@/lib/requestHellpers/PostRequest";
+import PostRequest from "@/lib/requestHelpers/PostRequest";
 import { toast } from "sonner";
 
 const formSchema = z.object({
