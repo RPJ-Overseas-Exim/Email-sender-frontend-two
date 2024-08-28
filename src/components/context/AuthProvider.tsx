@@ -1,5 +1,5 @@
 "use client";
-import GetRequest from "@/lib/requestHellpers/GetRequest";
+import GetRequest from "@/lib/requestHelpers/GetRequest";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { type Dispatch } from "react";

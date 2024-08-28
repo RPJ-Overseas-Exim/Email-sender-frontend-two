@@ -14,7 +14,6 @@ import Spinner from "@/components/ui/Spinner";
 import AddCustomer from "@/components/dashboard/dataEditor/AddCustomer";
 import DashboardPagination from "@/components/dashboard/dataEditor/DashboardPagination";
 import Filters from "@/components/dashboard/dataEditor/Filters";
-import ThemeSwitch from "@/components/context/ThemeSwitch";
 
 export default function SelectTable({
   data,
@@ -43,11 +42,11 @@ export default function SelectTable({
   return (
     <div>
       <div className="mb-2 flex items-center justify-between">
-        <div className="flex items-start text-xs font-semibold text-muted-foreground md:text-sm">
+        <div className="flex items-start text-xs text-muted-foreground md:text-sm md:font-semibold">
           <button
             type="button"
             className={cn(
-              "px-2 py-1 hover:bg-muted",
+              "p-1 hover:bg-muted lg:px-2 lg:py-1",
               tab === undefined && "dataTable__tab--active",
             )}
             onClick={() => handleTab()}
@@ -57,7 +56,7 @@ export default function SelectTable({
           <button
             type="button"
             className={cn(
-              "px-2 py-1 hover:bg-muted",
+              "p-1 hover:bg-muted lg:px-2 lg:py-1",
               tab === "enquiry" && "dataTable__tab--active",
             )}
             onClick={() => handleTab("enquiry")}
@@ -67,7 +66,7 @@ export default function SelectTable({
           <button
             type="button"
             className={cn(
-              "px-2 py-1 hover:bg-muted",
+              "p-1 hover:bg-muted lg:px-2 lg:py-1",
               tab === "reorder" && "dataTable__tab--active",
             )}
             onClick={() => handleTab("reorder")}
@@ -75,9 +74,6 @@ export default function SelectTable({
             Reorder
           </button>
           <Filters />
-          <div className="ml-4 mt-[-2px] self-center lg:hidden">
-            <ThemeSwitch />
-          </div>
         </div>
         <AddCustomer />
       </div>

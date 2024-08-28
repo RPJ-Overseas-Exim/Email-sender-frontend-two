@@ -8,7 +8,7 @@ export default async function GetRequest(url: string) {
 
   let res = null;
   try {
-    console.log(API_URL + API_VER + url);
+    //log the api route being requested: console.log(API_URL + API_VER + url);
     res = await (
       await fetch(API_URL + API_VER + url, {
         method: "GET",
@@ -16,7 +16,7 @@ export default async function GetRequest(url: string) {
         credentials: "include",
       })
     ).json();
-    console.log(res);
+    //log the response: console.log(res);
   } catch (error) {
     console.log(error);
   } finally {

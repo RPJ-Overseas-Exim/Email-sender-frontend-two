@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { PoppinsHeading } from "@/lib/fonts";
-import { Login as login } from "@/lib/requestHellpers/PostRequest";
+import { Login as login } from "@/lib/requestHelpers/PostRequest";
 import { useRouter } from "next/navigation";
 import useAuth from "@/components/context/AuthProvider";
 import { toast } from "sonner";
