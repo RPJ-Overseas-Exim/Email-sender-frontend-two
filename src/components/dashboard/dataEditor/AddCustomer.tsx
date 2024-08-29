@@ -16,7 +16,7 @@ import Spinner from "@/components/ui/Spinner";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import PostRequest from "@/lib/requestHellpers/PostRequest";
+import PostRequest from "@/lib/requestHelpers/PostRequest";
 import ComboBox from "./ComboBox";
 import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
 import revalPath from "@/lib/serverActions/revalPath";

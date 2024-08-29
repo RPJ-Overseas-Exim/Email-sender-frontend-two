@@ -1,4 +1,4 @@
-import GetRequest from "@/lib/requestHellpers/GetRequest";
+import GetRequest from "@/lib/requestHelpers/GetRequest";
 import UserEditor from "./UserEditor";
 import AddUser from "@/components/dashboard/userEditor/AddUser";
 export default async function page() {

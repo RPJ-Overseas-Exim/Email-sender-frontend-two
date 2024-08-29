@@ -17,10 +17,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import revalPath from "@/lib/serverActions/revalPath";
 import UserZod, { User } from "@/lib/types/UserEditor";
-import PutRequest from "@/lib/requestHellpers/PutRequest";
+import PutRequest from "@/lib/requestHelpers/PutRequest";
 
 export default function EditUser({ user }: { user: User }) {
-  console.log(user);
   const editForm = useForm<User>({
     resolver: zodResolver(UserZod),
     defaultValues: {
@@ -31,7 +30,6 @@ export default function EditUser({ user }: { user: User }) {
   const handleSubmit = async (user: User) => {
     try {
       const res = await PutRequest("/users/" + user.id, { ...user });
-      console.log(res);
       if (res?.data) {
         toast.success("User Edited successfully.");
         return revalPath("/dashboard/users");

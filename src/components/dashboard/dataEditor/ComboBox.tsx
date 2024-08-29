@@ -19,7 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import GetRequest from "@/lib/requestHellpers/GetRequest";
+import GetRequest from "@/lib/requestHelpers/GetRequest";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Combobox({

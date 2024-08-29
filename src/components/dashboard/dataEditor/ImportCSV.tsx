@@ -2,10 +2,10 @@
 import { CustomerZod } from "@/lib/types/dataEditor/dataEditor";
 import { CiImport } from "react-icons/ci";
 import { toast } from "sonner";
-import GetRequest from "@/lib/requestHellpers/GetRequest";
-import PostRequest from "@/lib/requestHellpers/PostRequest";
+import GetRequest from "@/lib/requestHelpers/GetRequest";
 import { useSearchParams } from "next/navigation";
 import revalPath from "@/lib/serverActions/revalPath";
+import PostRequest from "@/lib/requestHelpers/PostRequest";
 
 export default function ImportCSV() {
   const searchParams = useSearchParams();
@@ -27,8 +27,7 @@ export default function ImportCSV() {
           const res = await PostRequest("/customers/" + type, {
             customersData: jsonFile,
           });
-          console.log(res);
-          if (res.data) {
+          if (res?.data) {
             revalPath("/dashboard");
             toast.success("Customers added into " + type + " table");
           } else {
@@ -65,13 +64,13 @@ export default function ImportCSV() {
 }
 
 const csvToJson = async (file: string) => {
-  if (!file.length) return;
-  const jsonArray = file.split(/"\r\n" | "\n"/),
+  if (file.length <= 0) return null;
+  const jsonArray = file.split(/\r\n|\n/),
     nameIndex = jsonArray[0].split(",").indexOf("name"),
     emailIndex = jsonArray[0].split(",").indexOf("email"),
     numberIndex = jsonArray[0].split(",").indexOf("number"),
     productIndex = jsonArray[0].split(",").indexOf("product");
-
+  const jsonFile = [];
   try {
     const productsArray = (await GetRequest("/products")).data;
     const productsJson: { [x: string]: string } = {};
@@ -81,11 +80,9 @@ const csvToJson = async (file: string) => {
         productsJson[product.name.toLowerCase()] = product.id;
     });
 
-    const jsonFile = [];
-
     for (const line of jsonArray.slice(1)) {
       const lineArray = line.split(",");
-      const name = lineArray[nameIndex].replaceAll(/'"'|"\n" | "\r\n"/, ""),
+      const name = lineArray[nameIndex].replaceAll(/"/g, ""),
         email = lineArray[emailIndex],
         product = lineArray[productIndex],
         number = lineArray[numberIndex];
@@ -99,9 +96,11 @@ const csvToJson = async (file: string) => {
       };
       const valid = CustomerZod.safeParse(jsonObj);
       if (valid.success) jsonFile.push(jsonObj);
+      if (valid.error) console.log(valid.error);
     }
     return jsonFile;
   } catch (error) {
     console.error(error);
+    return jsonFile;
   }
 };

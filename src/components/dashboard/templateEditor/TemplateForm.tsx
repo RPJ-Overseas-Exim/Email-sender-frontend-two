@@ -13,17 +13,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
 import { Textarea } from "@/components/ui/textarea";
 import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
-import PostRequest from "@/lib/requestHellpers/PostRequest";
+import PostRequest from "@/lib/requestHelpers/PostRequest";
 import { Template, TemplateZod } from "@/lib/types/TemplateEditor";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import PutRequest from "@/lib/requestHellpers/PutRequest";
+import PutRequest from "@/lib/requestHelpers/PutRequest";
 import revalPath from "@/lib/serverActions/revalPath";
 import { useRouter } from "next/navigation";
-import DeleteRequest from "@/lib/requestHellpers/DeleteRequest";
+import DeleteRequest from "@/lib/requestHelpers/DeleteRequest";
 
 export default function TemplateForm({
   templates,
@@ -57,7 +56,7 @@ export default function TemplateForm({
       }
       if (res.data) {
         revalPath("/dashboard/template");
-        router.push("/dashboard/template");
+        resetForm();
         toast.success(res.message);
       } else if (res.error) toast.error(res.error);
     } catch (error) {
@@ -87,6 +86,11 @@ export default function TemplateForm({
     }
   };
 
+  const resetForm = () => {
+    form.reset();
+    router.push("/dashboard/template");
+  };
+
   useEffect(() => {
     form.setValue("name", searchParams.get("template") ?? "");
     form.setValue(
@@ -107,42 +111,38 @@ export default function TemplateForm({
       <div className="min-w-xs w-full rounded-lg border border-border bg-card">
         <Form {...form}>
           <form className="flex flex-col items-start justify-center gap-3 p-8">
-            <div className="flex w-full items-end justify-between gap-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <div className="flex w-full items-end justify-between gap-4">
                       <Input
                         placeholder="Template name"
                         className="capitalize"
                         {...field}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <TypeRadio setType={setType} getType={getType} />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
+            {/* <FormField
                 control={form.control}
                 name="type"
                 render={({ field }) => (
                   <FormItem className="w-fit">
                     <FormControl>
-                      <TypeRadio
-                        setType={setType}
-                        getType={getType}
-                        {...field}
-                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-            </div>
+              /> */}
 
             <FormField
               control={form.control}
@@ -170,7 +170,7 @@ export default function TemplateForm({
                 </FormItem>
               )}
             />
-            <div className="flex gap-4">
+            <div className="flex w-full justify-between">
               <Button
                 type="submit"
                 className="mt-4 bg-deepBlue"
@@ -178,13 +178,22 @@ export default function TemplateForm({
               >
                 Submit
               </Button>
-              <Button
-                type="submit"
-                className="mt-4 bg-red-600"
-                onClick={form.handleSubmit(deleteTemplate)}
-              >
-                Delete
-              </Button>
+              <div className="space-x-2">
+                <Button
+                  type="submit"
+                  className="mt-4 bg-red-600"
+                  onClick={form.handleSubmit(deleteTemplate)}
+                >
+                  Delete
+                </Button>
+                <Button
+                  type="button"
+                  className="mt-4 bg-green-600"
+                  onClick={() => resetForm()}
+                >
+                  Reset
+                </Button>
+              </div>
             </div>
           </form>
         </Form>

@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { IoIosMore } from "react-icons/io";
-import DeleteRequest from "@/lib/requestHellpers/DeleteRequest";
+import DeleteRequest from "@/lib/requestHelpers/DeleteRequest";
 import { toast } from "sonner";
 import revalPath from "@/lib/serverActions/revalPath";
-import PostRequest from "@/lib/requestHellpers/PostRequest";
+import PostRequest from "@/lib/requestHelpers/PostRequest";
 import { useSearchParams } from "next/navigation";
 import EditCustomer from "./EditCustomer";
 import ViewCustomer from "./ViewCustomer";

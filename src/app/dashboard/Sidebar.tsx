@@ -6,7 +6,7 @@ import { FaUsers } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeSwitch from "@/components/context/ThemeSwitch";
-import { Logout } from "@/lib/requestHellpers/GetRequest";
+import { Logout } from "@/lib/requestHelpers/GetRequest";
 import useAuth from "@/components/context/AuthProvider";
 import { FaClock } from "react-icons/fa";
 

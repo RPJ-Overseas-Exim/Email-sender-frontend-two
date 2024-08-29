@@ -1,9 +1,9 @@
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
 import SelectTable from "./SelectTable";
 import "./dataTable.css";
-import GetRequest from "@/lib/requestHellpers/GetRequest";
-import ImportCSV from "@/components/dashboard/dataEditor/ImportCSV";
-import ExportCSV from "@/components/dashboard/dataEditor/ExportCSV";
+import GetRequest from "@/lib/requestHelpers/GetRequest";
+import ThemeSwitch from "@/components/context/ThemeSwitch";
+import ImportExport from "@/components/dashboard/dataEditor/ImportExport";
 export const dynamic = "force-dynamic";
 export default async function DataEditor({
   searchParams,
@@ -14,30 +14,43 @@ export default async function DataEditor({
   return (
     <section id="data-editor" className="data-editor mx-auto w-[96%]">
       <div className="flex items-center justify-between">
-        <h1 className="sidebar__title py-8" style={{ display: "block" }}>
-          Data Editor
-        </h1>
-
-        <div className="flex items-center gap-4">
-          <ImportCSV />
-          <ExportCSV data={data} />
+        <div className="flex items-center gap-2">
+          <h1 className="sidebar__title py-8" style={{ display: "block" }}>
+            Data Editor
+          </h1>
+          <div className="lg:hidden">
+            <ThemeSwitch />
+          </div>
         </div>
+        <ImportExport data={data} />
       </div>
       <SelectTable data={data} count={Number(count)} />
     </section>
   );
 }
 
-function extractData(resData: { [x: string]: string }[]) {
+function extractData(
+  resData: { [x: string]: string }[],
+  sentDateFilter: { startDate: string; endDate: string },
+) {
   let customers: Customer[] = [];
   resData.map((customer: { [x: string]: string }) => {
-    const { id, name, email, product, status, number } = customer;
+    const { id, name, email, product, number } = customer;
+    let { sentDate } = customer;
+
+    let status;
+
+    (new Date(sentDate ?? "") >= new Date(sentDateFilter.startDate) &&
+      new Date(sentDate ?? "") <= new Date(sentDateFilter.endDate)) ||
+    sentDate === new Date().toISOString().split("T")[0]
+      ? (status = "sent")
+      : (status = "pending");
     customers.push({
       id,
       name,
       email,
       productId: product,
-      status: status ? "sent" : "pending",
+      status: status === "sent" ? "sent" : "pending",
       number: number,
     });
   });
@@ -53,7 +66,10 @@ async function applyFilters(searchParams: { [x: string]: string }) {
 
     const res = await GetRequest("/customers?" + queryString.toString());
     if (res?.data && res?.count) {
-      data = extractData(res.data);
+      data = extractData(res.data, {
+        endDate: searchParams["endDate"] ?? "",
+        startDate: searchParams["startDate"] ?? "",
+      });
       count = res.count;
       return { data, count };
     } else {
