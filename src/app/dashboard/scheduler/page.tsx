@@ -25,7 +25,7 @@ export default async function page() {
         </h1>
       </div>
 
-      <div className="h-[calc(100dvh-94px)] w-[96%] overflow-auto">
+      <div className="h-[calc(100dvh-94px)] overflow-auto">
         {schedule ? (
           <div className="w-full">
             <CustomerTable data={schedule} columns={columns} />

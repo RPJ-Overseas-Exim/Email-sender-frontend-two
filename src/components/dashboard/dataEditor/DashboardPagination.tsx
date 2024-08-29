@@ -8,12 +8,10 @@ import {
   PaginationLast,
 } from "@/components/ui/pagination";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function DashboardPagination({ count }: { count: number }) {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const [page, setPage] = React.useState<number>(1);
   const lastPage = Math.ceil(count / (Number(searchParams.get("limit")) || 10));
 
@@ -36,6 +34,7 @@ export default function DashboardPagination({ count }: { count: number }) {
           <PaginationFirst
             onClick={() => setPage(1)}
             href={"/dashboard?" + createQuery("offset", "0")}
+            className="p-2 text-xs md:text-sm"
           />
         </PaginationItem>
 
@@ -46,7 +45,7 @@ export default function DashboardPagination({ count }: { count: number }) {
                 setPage(page - 1);
               }}
               href={"/dashboard?" + createQuery("offset", String(page - 1))}
-              className="rounded-md bg-[var(--bg-light)] hover:bg-gray-200"
+              className="rounded-md bg-[var(--bg-light)] p-2 text-xs hover:bg-gray-200 md:text-sm"
             >
               {page - 1}
             </PaginationLink>
@@ -54,7 +53,9 @@ export default function DashboardPagination({ count }: { count: number }) {
         )}
 
         <PaginationItem className="rounded-md border border-[var(--text-gray)]">
-          <PaginationLink href="#">{page}</PaginationLink>
+          <PaginationLink href="#" className="p-2 text-xs md:text-sm">
+            {page}
+          </PaginationLink>
         </PaginationItem>
 
         {page + 1 <= lastPage && (
@@ -64,7 +65,7 @@ export default function DashboardPagination({ count }: { count: number }) {
               onClick={() => {
                 setPage(page + 1);
               }}
-              className="rounded-md bg-[var(--bg-light)] hover:bg-gray-200"
+              className="rounded-md bg-[var(--bg-light)] p-2 text-xs hover:bg-gray-200 md:text-sm"
             >
               {page + 1}
             </PaginationLink>
