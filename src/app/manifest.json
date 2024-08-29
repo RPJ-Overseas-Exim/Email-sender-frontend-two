@@ -1,0 +1,21 @@
+{
+  "short_name": "E-Sender",
+  "name": "Email Sender",
+  "description": "Automate sending emails",
+  "icons": [
+    {
+      "src": "/favicon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

@@ -63,7 +63,6 @@ async function applyFilters(searchParams: { [x: string]: string }) {
 
   try {
     const queryString = new URLSearchParams(searchParams);
-
     const res = await GetRequest("/customers?" + queryString.toString());
     if (res?.data && res?.count) {
       data = extractData(res.data, {
