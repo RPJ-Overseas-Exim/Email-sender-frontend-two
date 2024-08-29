@@ -34,8 +34,10 @@ export default function TemplateCombobox({
   const [template, setTemplate] = React.useState<string>("");
 
   React.useEffect(() => {
-    if (searchParams.get("template"))
-      setTemplate(searchParams.get("template") ?? "");
+    if (searchParams.get("template") && searchParams.get("type"))
+      setTemplate(
+        searchParams.get("template") + "-" + searchParams.get("type"),
+      );
     else setTemplate("");
   }, [searchParams, setTemplate]);
 
@@ -49,7 +51,7 @@ export default function TemplateCombobox({
             aria-expanded={open}
             className="w-[200px] justify-between capitalize"
           >
-            {template !== "" ? template : "Select Product..."}
+            {template ? template : "Select Product..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -63,13 +65,13 @@ export default function TemplateCombobox({
                   <CommandItem
                     id={currTemplate.id}
                     key={currTemplate.id}
-                    value={currTemplate.name}
+                    value={currTemplate?.fullName ?? ""}
                     className="capitalize"
                     onSelect={() => {
                       setOpen(false);
                       setTemplate(currTemplate.name);
                       const searchP = new URLSearchParams(searchParams);
-                      searchP.set("template", currTemplate.name);
+                      searchP.set("template", currTemplate?.name ?? "");
                       searchP.set("type", currTemplate.type);
                       router.push("/dashboard/template?" + searchP.toString());
                     }}
@@ -77,12 +79,12 @@ export default function TemplateCombobox({
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4 text-foreground",
-                        currTemplate.name === template
+                        currTemplate.fullName === template
                           ? "opacity-100"
                           : "opacity-0",
                       )}
                     />
-                    {currTemplate.name}
+                    {currTemplate.fullName}
                   </CommandItem>
                 ))}
               </CommandGroup>
