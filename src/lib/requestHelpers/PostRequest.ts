@@ -28,7 +28,8 @@ export async function Login(data: any) {
 
   const resJson = await res.json();
   if (resJson?.token) {
-    const expire = (Number(process.env.JWT_EXPIRE) ?? 3) * 24 * 60 * 60;
+    const expire = (Number(process.env.JWT_EXPIRE) || 3) * 24 * 60 * 60;
+    console.log(expire);
     cookieStore.set("Authentication", resJson.token, {
       httpOnly: true,
       sameSite: "lax",

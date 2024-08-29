@@ -20,7 +20,7 @@ import EditSchedule from "./EditSchedule";
 const ScheduleCell = ({ schedule }: { schedule: Scheduler }) => {
   const reschedule = async (type: string) => {
     try {
-      const undoRes = await PutRequest("/schedule/", type);
+      const undoRes = await PutRequest("/schedule/" + type, schedule);
       console.log(undoRes);
       if (undoRes.data) {
         toast.success("Operation undone");
