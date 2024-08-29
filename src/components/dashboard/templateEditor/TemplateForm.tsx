@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
 import { Textarea } from "@/components/ui/textarea";
 import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
 import PostRequest from "@/lib/requestHelpers/PostRequest";
@@ -86,6 +85,11 @@ export default function TemplateForm({
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const resetForm = () => {
+    form.reset();
+    router.push("/dashboard/template");
   };
 
   useEffect(() => {
@@ -171,7 +175,7 @@ export default function TemplateForm({
                 </FormItem>
               )}
             />
-            <div className="flex gap-4">
+            <div className="flex w-full justify-between">
               <Button
                 type="submit"
                 className="mt-4 bg-deepBlue"
@@ -179,13 +183,22 @@ export default function TemplateForm({
               >
                 Submit
               </Button>
-              <Button
-                type="submit"
-                className="mt-4 bg-red-600"
-                onClick={form.handleSubmit(deleteTemplate)}
-              >
-                Delete
-              </Button>
+              <div className="space-x-2">
+                <Button
+                  type="submit"
+                  className="mt-4 bg-red-600"
+                  onClick={form.handleSubmit(deleteTemplate)}
+                >
+                  Delete
+                </Button>
+                <Button
+                  type="button"
+                  className="mt-4 bg-green-600"
+                  onClick={() => resetForm()}
+                >
+                  Reset
+                </Button>
+              </div>
             </div>
           </form>
         </Form>

@@ -12,9 +12,15 @@ export default async function TemplateEditor() {
       (template: { name: string; body: string; subject: string }) => {
         const [type, name] = template.name.split("-");
         templateMap[name] = { subject: template.subject, body: template.body };
-        return { ...template, name, type };
+        return {
+          ...template,
+          name,
+          fullName: `${name}-${type}`,
+          type,
+        };
       },
     );
+    templates.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0));
   } else {
     templates = [];
   }
