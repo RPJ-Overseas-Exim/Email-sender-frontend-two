@@ -34,7 +34,6 @@ export default function TemplateForm({
 
   const form = useForm<Template>({
     resolver: zodResolver(TemplateZod),
-    defaultValues: {},
   });
 
   const onSubmit = async (data: Template) => {
@@ -93,10 +92,13 @@ export default function TemplateForm({
 
   useEffect(() => {
     form.setValue("name", searchParams.get("template") ?? "");
-    form.setValue(
-      "type",
-      searchParams.get("type") === "enquiry" || null ? "enquiry" : "reorder",
-    );
+
+    if (searchParams.get("type")) {
+      form.setValue(
+        "type",
+        searchParams.get("type") === "enquiry" ? "enquiry" : "reorder",
+      );
+    }
     form.setValue(
       "body",
       templates?.[searchParams.get("template") ?? ""]?.body ?? "",
@@ -131,18 +133,6 @@ export default function TemplateForm({
                 </FormItem>
               )}
             />
-
-            {/* <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem className="w-fit">
-                    <FormControl>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
 
             <FormField
               control={form.control}

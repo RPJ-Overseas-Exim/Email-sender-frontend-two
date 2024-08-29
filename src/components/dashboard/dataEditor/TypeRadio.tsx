@@ -14,12 +14,13 @@ import {
 export default function TypeRadio({
   setType,
   getType,
-  ...field
 }: {
   setType: (type: "enquiry" | "reorder") => void;
   getType: () => string;
 }) {
-  const [value, setValue] = React.useState(getType());
+  const [value, setValue] = React.useState<string | undefined>(
+    getType() === "" ? undefined : getType(),
+  );
 
   return (
     <DropdownMenu>
@@ -35,7 +36,6 @@ export default function TypeRadio({
               setValue(getType());
             }
           }}
-          {...field}
         >
           <DropdownMenuRadioItem value="enquiry">Enquiry</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="reorder">Reorder</DropdownMenuRadioItem>
