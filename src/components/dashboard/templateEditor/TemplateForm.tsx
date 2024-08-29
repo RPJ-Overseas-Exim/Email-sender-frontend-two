@@ -56,8 +56,7 @@ export default function TemplateForm({
       }
       if (res.data) {
         revalPath("/dashboard/template");
-        form.reset();
-        router.push("/dashboard/template");
+        resetForm();
         toast.success(res.message);
       } else if (res.error) toast.error(res.error);
     } catch (error) {
@@ -112,42 +111,38 @@ export default function TemplateForm({
       <div className="min-w-xs w-full rounded-lg border border-border bg-card">
         <Form {...form}>
           <form className="flex flex-col items-start justify-center gap-3 p-8">
-            <div className="flex w-full items-end justify-between gap-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <div className="flex w-full items-end justify-between gap-4">
                       <Input
                         placeholder="Template name"
                         className="capitalize"
                         {...field}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <TypeRadio setType={setType} getType={getType} />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
+            {/* <FormField
                 control={form.control}
                 name="type"
                 render={({ field }) => (
                   <FormItem className="w-fit">
                     <FormControl>
-                      <TypeRadio
-                        setType={setType}
-                        getType={getType}
-                        {...field}
-                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-            </div>
+              /> */}
 
             <FormField
               control={form.control}
