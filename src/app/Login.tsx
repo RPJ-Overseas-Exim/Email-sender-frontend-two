@@ -97,9 +97,9 @@ export default function Login() {
                     <ShowHidePassword field={field} />
                   </FormControl>
                   <FormMessage />
-                  <FormDescription className="text-sm text-deepBlue underline">
+                  {/* <FormDescription className="text-sm text-deepBlue underline">
                     <Link href="/">Forgot your password?</Link>
-                  </FormDescription>
+                  </FormDescription> */}
                 </FormItem>
               )}
             />
@@ -113,12 +113,6 @@ export default function Login() {
           </form>
         </Form>
       </div>
-      <p className="text-xs text-muted-foreground md:text-sm">
-        Don&apos;t have an account?&nbsp;
-        <Link href="/register" className="text-deepBlue underline">
-          Register
-        </Link>
-      </p>
     </section>
   );
 }
