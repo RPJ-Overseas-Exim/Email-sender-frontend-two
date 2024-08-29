@@ -24,14 +24,11 @@ export default function DashboardPagination({ count }: { count: number }) {
   };
 
   React.useEffect(() => {
-    router.push("/dashboard?" + createQuery("offset", String(page - 1)));
-  }, [page]);
-
-  React.useEffect(() => {
-    setPage(
-      searchParams.get("offset") ? Number(searchParams.get("offset")) + 1 : 1,
-    );
+    if (Number(searchParams.get("offset")) + 1 !== page) {
+      setPage(Number(searchParams.get("offset")) + 1);
+    }
   }, [searchParams]);
+
   return (
     <Pagination className="shop__pagination my-4">
       <PaginationContent>

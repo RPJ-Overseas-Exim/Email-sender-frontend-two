@@ -4,6 +4,7 @@ import CustomerTable from "@/components/dashboard/data-table";
 import { columns } from "@/components/dashboard/scheduler/columns";
 import Spinner from "@/components/ui/Spinner";
 
+export const dynamic = "force-dynamic";
 export default async function page() {
   let schedule: Scheduler[] | null = null;
   try {

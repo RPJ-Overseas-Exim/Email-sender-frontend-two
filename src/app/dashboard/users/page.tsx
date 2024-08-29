@@ -1,6 +1,8 @@
 import GetRequest from "@/lib/requestHelpers/GetRequest";
 import UserEditor from "./UserEditor";
 import AddUser from "@/components/dashboard/userEditor/AddUser";
+
+export const dynamic = "force-dynamic";
 export default async function page() {
   let data: [] | null = [];
   try {
