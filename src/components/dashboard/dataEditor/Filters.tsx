@@ -46,10 +46,7 @@ export default function Filters() {
     for (const [query, value] of Object.entries(filters)) {
       if (query === "startDate" || query === "endDate") {
         if (!(value instanceof Date)) continue;
-        SParams.set(
-          query,
-          `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`,
-        );
+        SParams.set(query, value.toISOString().split("T")[0]);
         continue;
       }
       if (query === "limit" && Number(value) > 200) {
@@ -109,14 +106,33 @@ export default function Filters() {
                 setFilters={setFilters}
               />
             </div>
-            <Button
-              type="submit"
-              size="sm"
-              className="mt-4 w-full bg-sky-500 px-3 text-white hover:bg-sky-700"
-              onClick={applyFilters}
-            >
-              <span>Filter</span>
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                type="submit"
+                size="sm"
+                className="mt-4 w-full bg-sky-500 px-3 text-white hover:bg-sky-700"
+                onClick={applyFilters}
+              >
+                <span>Filter</span>
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                className="hover:bg- mt-4 w-full bg-red-600 px-3 text-white"
+                onClick={() => {
+                  const query = [];
+                  if (searchParams.get("type")) {
+                    query.push("type=" + searchParams.get("type"));
+                  }
+                  if (searchParams.get("offset")) {
+                    query.push("offset=" + searchParams.get("offset"));
+                  }
+                  router.push("/dashboard?" + query.join("&"));
+                }}
+              >
+                <span>Clear</span>
+              </Button>
+            </div>
           </form>
         </aside>
       </div>

@@ -29,16 +29,28 @@ export default async function DataEditor({
   );
 }
 
-function extractData(resData: { [x: string]: string }[]) {
+function extractData(
+  resData: { [x: string]: string }[],
+  sentDateFilter: { startDate: string; endDate: string },
+) {
   let customers: Customer[] = [];
   resData.map((customer: { [x: string]: string }) => {
-    const { id, name, email, product, status, number } = customer;
+    const { id, name, email, product, number } = customer;
+    let { sentDate } = customer;
+
+    let status;
+
+    (new Date(sentDate ?? "") >= new Date(sentDateFilter.startDate) &&
+      new Date(sentDate ?? "") <= new Date(sentDateFilter.endDate)) ||
+    sentDate === new Date().toISOString().split("T")[0]
+      ? (status = "sent")
+      : (status = "pending");
     customers.push({
       id,
       name,
       email,
       productId: product,
-      status: status ? "sent" : "pending",
+      status: status === "sent" ? "sent" : "pending",
       number: number,
     });
   });
@@ -54,7 +66,10 @@ async function applyFilters(searchParams: { [x: string]: string }) {
 
     const res = await GetRequest("/customers?" + queryString.toString());
     if (res?.data && res?.count) {
-      data = extractData(res.data);
+      data = extractData(res.data, {
+        endDate: searchParams["endDate"] ?? "",
+        startDate: searchParams["startDate"] ?? "",
+      });
       count = res.count;
       return { data, count };
     } else {
