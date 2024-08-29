@@ -22,10 +22,12 @@ import UserZod, { User } from "@/lib/types/UserEditor";
 export default function AddUser() {
   const form = useForm<User>({
     resolver: zodResolver(UserZod),
+    defaultValues: {
+      role: "user",
+    },
   });
 
   const handleSubmit = async (user: User) => {
-    console.log(user);
     try {
       const res = await PostRequest("/users", { ...user });
       if (res.data) {

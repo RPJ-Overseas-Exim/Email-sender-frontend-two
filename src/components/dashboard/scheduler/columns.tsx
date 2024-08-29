@@ -18,12 +18,14 @@ import PutRequest from "@/lib/requestHelpers/PutRequest";
 import EditSchedule from "./EditSchedule";
 
 const ScheduleCell = ({ schedule }: { schedule: Scheduler }) => {
-  const reschedule = async (type: string) => {
+  const reschedule = async () => {
     try {
-      const undoRes = await PutRequest("/schedule/" + type, schedule);
-      console.log(undoRes);
-      if (undoRes.data) {
+      const undoRes = await PutRequest("/schedule/" + schedule.type, schedule);
+      if (undoRes?.message) {
         toast.success("Operation undone");
+      }
+      if (undoRes?.error) {
+        toast.error("Operation couldn't be undone");
       }
     } catch (error) {
       console.error("Error while deleting user: ", error);
@@ -40,7 +42,7 @@ const ScheduleCell = ({ schedule }: { schedule: Scheduler }) => {
       toast(res.message, {
         action: {
           label: "Undo",
-          onClick: () => reschedule(type),
+          onClick: () => reschedule(),
         },
       });
     }
