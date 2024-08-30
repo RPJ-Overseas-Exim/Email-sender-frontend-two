@@ -13,13 +13,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function DatePicker({
+export function StartDatePicker({
   startDate,
   setFilters,
-  endDate,
 }: {
   startDate: Date | undefined;
-  endDate: Date | undefined;
   setFilters: React.Dispatch<
     React.SetStateAction<{
       limit: number;
@@ -40,31 +38,21 @@ export function DatePicker({
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {startDate ? (
-            endDate ? (
-              <>
-                {format(startDate, "LLL dd, y")} -{" "}
-                {format(endDate, "LLL dd, y")}
-              </>
-            ) : (
-              format(startDate, "LLL dd, y")
-            )
+            <>{format(startDate, "LLL dd, y")} - </>
           ) : (
-            <span>Pick a date</span>
+            <span>Pick a start date</span>
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
-          mode="range"
-          selected={
-            startDate && endDate ? { from: startDate, to: endDate } : undefined
-          }
+          mode="single"
+          selected={startDate}
           onSelect={(date) => {
             setFilters((filters) => {
               return {
                 ...filters,
-                startDate: date?.from ?? new Date(),
-                endDate: date?.to ?? new Date(),
+                startDate: date ?? new Date(),
               };
             });
           }}
