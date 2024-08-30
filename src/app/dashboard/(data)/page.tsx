@@ -43,7 +43,8 @@ function extractData(
     const startDate = new Date(sentDateFilter.startDate).toLocaleDateString();
     const endDate = new Date(sentDateFilter.endDate).toLocaleDateString();
     const currDate = new Date().toLocaleDateString();
-    (sentDateString >= startDate && sentDateString <= endDate) ||
+    sentDateString >= startDate ||
+    sentDateString <= endDate ||
     sentDateString === currDate
       ? (status = "sent")
       : (status = "pending");
