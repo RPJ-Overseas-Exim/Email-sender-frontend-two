@@ -46,9 +46,13 @@ export default function Filters() {
     for (const [query, value] of Object.entries(filters)) {
       if (query === "startDate" || query === "endDate") {
         if (!(value instanceof Date)) continue;
-        SParams.set(query, value.toISOString().split("T")[0]);
+        SParams.set(
+          query,
+          `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`,
+        );
         continue;
       }
+
       if (query === "limit" && Number(value) > 200) {
         toast.error("Limit cannot exceed 200");
         return;
@@ -118,7 +122,7 @@ export default function Filters() {
               <Button
                 type="button"
                 size="sm"
-                className="hover:bg- mt-4 w-full bg-red-600 px-3 text-white"
+                className="hover:bg- mt-4 w-full bg-red-600 px-3 text-white hover:bg-red-700"
                 onClick={() => {
                   const query = [];
                   if (searchParams.get("type")) {

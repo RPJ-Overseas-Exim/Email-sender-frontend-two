@@ -28,57 +28,62 @@ export default function DashboardPagination({ count }: { count: number }) {
   }, [searchParams]);
 
   return (
-    <Pagination className="shop__pagination my-4">
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationFirst
-            onClick={() => setPage(1)}
-            href={"/dashboard?" + createQuery("offset", "0")}
-            className="p-2 text-xs md:text-sm"
-          />
-        </PaginationItem>
-
-        {page - 2 > 0 && (
+    <div className="relative px-8">
+      <Pagination className="shop__pagination my-4">
+        <PaginationContent>
           <PaginationItem>
-            <PaginationLink
-              onClick={() => {
-                setPage(page - 1);
-              }}
-              href={"/dashboard?" + createQuery("offset", String(page-2))}
-              className="rounded-md bg-[var(--bg-light)] p-2 text-xs hover:bg-gray-200 md:text-sm"
-            >
-              {page - 1}
+            <PaginationFirst
+              onClick={() => setPage(1)}
+              href={"/dashboard?" + createQuery("offset", "0")}
+              className="p-2 text-xs md:text-sm"
+            />
+          </PaginationItem>
+
+          {page - 2 > 0 && (
+            <PaginationItem>
+              <PaginationLink
+                onClick={() => {
+                  setPage(page - 1);
+                }}
+                href={"/dashboard?" + createQuery("offset", String(page - 2))}
+                className="rounded-md bg-[var(--bg-light)] p-2 text-xs hover:bg-gray-200 md:text-sm"
+              >
+                {page - 1}
+              </PaginationLink>
+            </PaginationItem>
+          )}
+
+          <PaginationItem className="rounded-md border border-[var(--text-gray)]">
+            <PaginationLink href="#" className="p-2 text-xs md:text-sm">
+              {page}
             </PaginationLink>
           </PaginationItem>
-        )}
 
-        <PaginationItem className="rounded-md border border-[var(--text-gray)]">
-          <PaginationLink href="#" className="p-2 text-xs md:text-sm">
-            {page}
-          </PaginationLink>
-        </PaginationItem>
+          {page + 1 < lastPage && (
+            <PaginationItem>
+              <PaginationLink
+                href={"/dashboard?" + createQuery("offset", String(page))}
+                onClick={() => {
+                  setPage(page + 1);
+                }}
+                className="rounded-md bg-[var(--bg-light)] p-2 text-xs hover:bg-gray-200 md:text-sm"
+              >
+                {page + 1}
+              </PaginationLink>
+            </PaginationItem>
+          )}
 
-        {page + 1 < lastPage && (
           <PaginationItem>
-            <PaginationLink
-              href={"/dashboard?" + createQuery("offset", String(page))}
-              onClick={() => {
-                setPage(page + 1);
-              }}
-              className="rounded-md bg-[var(--bg-light)] p-2 text-xs hover:bg-gray-200 md:text-sm"
-            >
-              {page + 1}
-            </PaginationLink>
+            <PaginationLast
+              onClick={() => setPage(lastPage)}
+              href={"/dashboard?" + createQuery("offset", String(lastPage - 1))}
+            />
           </PaginationItem>
-        )}
-
-        <PaginationItem>
-          <PaginationLast
-            onClick={() => setPage(lastPage)}
-            href={"/dashboard?" + createQuery("offset", String(lastPage - 1))}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+        </PaginationContent>
+      </Pagination>
+      <p className="absolute left-0 top-0 h-full text-xs text-muted-foreground">
+        Count:&nbsp; {count}
+      </p>
+    </div>
   );
 }

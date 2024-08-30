@@ -63,7 +63,10 @@ async function applyFilters(searchParams: { [x: string]: string }) {
 
   try {
     const queryString = new URLSearchParams(searchParams);
-    const res = await GetRequest("/customers?" + queryString.toString());
+    let res;
+    if (queryString.get("startDate") || queryString.get("endDate")) {
+      res = await GetRequest("/stats?" + queryString.toString());
+    } else res = await GetRequest("/customers?" + queryString.toString());
     if (res?.data && res?.count) {
       data = extractData(res.data, {
         endDate: searchParams["endDate"] ?? "",
