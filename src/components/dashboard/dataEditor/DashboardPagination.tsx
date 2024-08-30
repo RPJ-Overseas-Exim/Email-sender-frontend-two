@@ -38,13 +38,13 @@ export default function DashboardPagination({ count }: { count: number }) {
           />
         </PaginationItem>
 
-        {page - 2 >= 0 && (
+        {page - 2 > 0 && (
           <PaginationItem>
             <PaginationLink
               onClick={() => {
                 setPage(page - 1);
               }}
-              href={"/dashboard?" + createQuery("offset", String(page - 1))}
+              href={"/dashboard?" + createQuery("offset", String(page-2))}
               className="rounded-md bg-[var(--bg-light)] p-2 text-xs hover:bg-gray-200 md:text-sm"
             >
               {page - 1}
@@ -58,7 +58,7 @@ export default function DashboardPagination({ count }: { count: number }) {
           </PaginationLink>
         </PaginationItem>
 
-        {page + 1 <= lastPage && (
+        {page + 1 < lastPage && (
           <PaginationItem>
             <PaginationLink
               href={"/dashboard?" + createQuery("offset", String(page))}
