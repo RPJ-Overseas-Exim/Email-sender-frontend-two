@@ -22,17 +22,24 @@ import SchedulerZod, {
   type TypeEnum,
 } from "@/lib/types/Scheduler";
 import SchedulerTypeRadio from "./SchedulerTypeRadio";
+import { getGMTTime, getISTTime } from "@/lib/utils";
 
 export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
   const editForm = useForm<Scheduler>({
     resolver: zodResolver(SchedulerZod),
     defaultValues: {
       ...schedule,
+      minute: getISTTime(schedule.hour, schedule.minute).minutes,
+      hour: getISTTime(schedule.hour, schedule.minute).hours,
     },
   });
 
   const handleSubmit = async (schedule: Scheduler) => {
     try {
+      const { hours, minutes } = getGMTTime(schedule.hour, schedule.minute);
+      console.log(hours);
+      schedule.minute = minutes;
+      schedule.hour = hours;
       const res = await PutRequest("/schedule/" + schedule.type, {
         ...schedule,
       });

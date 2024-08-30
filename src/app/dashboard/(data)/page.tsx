@@ -39,10 +39,12 @@ function extractData(
     let { sentDate } = customer;
 
     let status;
-
-    (new Date(sentDate ?? "") >= new Date(sentDateFilter.startDate) &&
-      new Date(sentDate ?? "") <= new Date(sentDateFilter.endDate)) ||
-    sentDate === new Date().toISOString().split("T")[0]
+    const sentDateString = new Date(sentDate).toLocaleDateString();
+    const startDate = new Date(sentDateFilter.startDate).toLocaleDateString();
+    const endDate = new Date(sentDateFilter.endDate).toLocaleDateString();
+    const currDate = new Date().toLocaleDateString();
+    (sentDateString >= startDate && sentDateString <= endDate) ||
+    sentDateString === currDate
       ? (status = "sent")
       : (status = "pending");
     customers.push({

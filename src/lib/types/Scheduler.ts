@@ -21,6 +21,7 @@ const SchedulerZod = z.object({
       return true;
     }),
   type: z.enum(["enquiry", "reorder", "reorderDefault", "enquiryDefault"]),
+  days: z.string().optional(),
 });
 export type TypeEnum =
   | "enquiry"

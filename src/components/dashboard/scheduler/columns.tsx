@@ -16,6 +16,7 @@ import DeleteRequest from "@/lib/requestHelpers/DeleteRequest";
 import { Scheduler } from "@/lib/types/Scheduler";
 import PutRequest from "@/lib/requestHelpers/PutRequest";
 import EditSchedule from "./EditSchedule";
+import { getISTTime } from "@/lib/utils";
 
 const ScheduleCell = ({ schedule }: { schedule: Scheduler }) => {
   const reschedule = async () => {
@@ -82,10 +83,22 @@ export const columns: ColumnDef<Scheduler>[] = [
   {
     accessorKey: "hour",
     header: "Hour",
+    cell: ({ row }) => {
+      const min = row.original.minute;
+      const hour = row.original.hour;
+      const { hours } = getISTTime(hour, min);
+      return hours;
+    },
   },
   {
     accessorKey: "minute",
     header: "Minute",
+    cell: ({ row }) => {
+      const min = row.original.minute;
+      const hour = row.original.hour;
+      const { minutes } = getISTTime(hour, min);
+      return minutes;
+    },
   },
   {
     id: "actions",
