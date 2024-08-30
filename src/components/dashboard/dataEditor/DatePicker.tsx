@@ -59,17 +59,15 @@ export function DatePicker({
           selected={
             startDate && endDate ? { from: startDate, to: endDate } : undefined
           }
-          onSelect={(date) =>
+          onSelect={(date) => {
             setFilters((filters) => {
-              if (date)
-                return {
-                  ...filters,
-                  startDate: date?.from ?? new Date(),
-                  endDate: date?.to ?? new Date(),
-                };
-              return filters;
-            })
-          }
+              return {
+                ...filters,
+                startDate: date?.from ?? new Date(),
+                endDate: date?.to ?? new Date(),
+              };
+            });
+          }}
           initialFocus
         />
       </PopoverContent>
