@@ -31,6 +31,7 @@ export default function DashboardPagination({ count }: { count: number }) {
     <div className="relative px-8">
       <Pagination className="shop__pagination my-4">
         <PaginationContent>
+          {/*first page button */}
           <PaginationItem>
             <PaginationFirst
               onClick={() => setPage(1)}
@@ -39,7 +40,8 @@ export default function DashboardPagination({ count }: { count: number }) {
             />
           </PaginationItem>
 
-          {page - 2 > 0 && (
+          {/* current page button */}
+          {page - 2 >= 0 && (
             <PaginationItem>
               <PaginationLink
                 onClick={() => {
@@ -53,13 +55,15 @@ export default function DashboardPagination({ count }: { count: number }) {
             </PaginationItem>
           )}
 
+          {/* current page button */}
           <PaginationItem className="rounded-md border border-[var(--text-gray)]">
             <PaginationLink href="#" className="p-2 text-xs md:text-sm">
               {page}
             </PaginationLink>
           </PaginationItem>
 
-          {page + 1 < lastPage && (
+          {/* next page button */}
+          {page + 1 <= lastPage && (
             <PaginationItem>
               <PaginationLink
                 href={"/dashboard?" + createQuery("offset", String(page))}
@@ -73,6 +77,7 @@ export default function DashboardPagination({ count }: { count: number }) {
             </PaginationItem>
           )}
 
+          {/* last page button */}
           <PaginationItem>
             <PaginationLast
               onClick={() => setPage(lastPage)}
