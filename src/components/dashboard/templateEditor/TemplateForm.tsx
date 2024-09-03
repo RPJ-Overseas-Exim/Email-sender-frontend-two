@@ -1,11 +1,4 @@
 "use client";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -20,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
-import TypeRadio from "@/components/dashboard/dataEditor/TypeRadio";
+import TemplateRadioGroup from "./TemplateRadioGroup";
 import PostRequest from "@/lib/requestHelpers/PostRequest";
 import { Template, TemplateZod } from "@/lib/types/TemplateEditor";
 import { useSearchParams } from "next/navigation";
@@ -153,7 +146,7 @@ export default function TemplateForm({
                   <FormItem className="w-fit">
                     <FormLabel>Type</FormLabel>
                     <FormControl>
-                      <TypeRadio field={field} />
+                      <TemplateRadioGroup field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
