@@ -10,6 +10,7 @@ export default async function page() {
   try {
     const res = await GetRequest("/schedule");
     if (res?.data) {
+      console.log(res?.data);
       schedule = res.data;
     } else if (res?.error) {
       console.log(res.error);

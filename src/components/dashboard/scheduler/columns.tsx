@@ -81,11 +81,13 @@ export const columns: ColumnDef<Scheduler>[] = [
     header: "Name",
   },
   {
+    accessorKey: "daysOfWeek",
+    header: "Days",
+  },
+  {
     accessorKey: "hour",
     header: "Hour",
-    cell: ({ row }) => {
-      const min = row.original.minute;
-      const hour = row.original.hour;
+    accessorFn: ({ minute: min, hour }) => {
       const { hours } = getISTTime(hour, min);
       return hours;
     },
