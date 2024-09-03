@@ -10,32 +10,32 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ControllerRenderProps } from "react-hook-form";
 
 export default function TypeRadio({
-  setType,
-  getType,
+  field,
 }: {
-  setType: (type: "enquiry" | "reorder") => void;
-  getType: () => string;
+  field: ControllerRenderProps<
+    {
+      name: string;
+      type: "reorder" | "enquiry";
+      subject: string;
+      body: string;
+      id?: string | undefined;
+      fullName?: string | undefined;
+    },
+    "type"
+  >;
 }) {
-  const [value, setValue] = React.useState<string | undefined>(
-    getType() === "" ? undefined : getType(),
-  );
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{getType() || "Select type"}</Button>
+        <Button variant="outline">{field.value || "Select type"}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuRadioGroup
-          value={value}
-          onValueChange={(value) => {
-            if (value === "enquiry" || value === "reorder") {
-              setType(value);
-              setValue(getType());
-            }
-          }}
+          defaultValue={field.value}
+          onValueChange={field.onChange}
         >
           <DropdownMenuRadioItem value="enquiry">Enquiry</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="reorder">Reorder</DropdownMenuRadioItem>
