@@ -83,6 +83,12 @@ export const columns: ColumnDef<Scheduler>[] = [
   {
     accessorKey: "daysOfWeek",
     header: "Days",
+    cell: ({ row }) => {
+      const daysOfWeek = row.original.daysOfWeek;
+      return (
+        <div className="max-w-[10rem]">{daysOfWeek.replaceAll(/,/g, ", ")}</div>
+      );
+    },
   },
   {
     accessorKey: "hour",
@@ -100,6 +106,14 @@ export const columns: ColumnDef<Scheduler>[] = [
       const hour = row.original.hour;
       const { minutes } = getISTTime(hour, min);
       return minutes;
+    },
+  },
+  {
+    accessorKey: "products",
+    header: "Products",
+    cell: ({ row }) => {
+      const products = row.original.products;
+      return <div className="max-w-[10rem]">{products.join(", ")}</div>;
     },
   },
   {
