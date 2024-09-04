@@ -3,7 +3,7 @@ import { z } from "zod";
 const SchedulerZod = z.object({
   hour: z
     .string()
-    .min(1, "Please provide hour")
+    .min(1, "Please provide hour value")
     .max(2, "Hours cannot exceed 2 digits")
     .refine((hour) => {
       if (isNaN(parseInt(hour))) {
