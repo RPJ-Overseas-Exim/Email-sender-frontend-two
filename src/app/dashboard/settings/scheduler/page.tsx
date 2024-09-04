@@ -11,6 +11,7 @@ export default async function page() {
   let schedule: Scheduler[] | null = null;
   try {
     const res = await GetRequest("/schedule");
+    await new Promise((resolve) => setTimeout(resolve, 100));
     let resAllProducts = await GetRequest("/products");
     console.log(res, resAllProducts);
     if (res?.data && resAllProducts?.data) {
