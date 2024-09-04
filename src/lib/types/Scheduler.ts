@@ -23,6 +23,8 @@ const SchedulerZod = z.object({
     }),
   type: z.enum(["enquiry", "reorder", "reorderDefault", "enquiryDefault"]),
   daysOfWeek: z.string().default("?"),
+  products: z.array(z.string()),
+  allProducts: z.array(z.string()),
 });
 
 export type TypeEnum =

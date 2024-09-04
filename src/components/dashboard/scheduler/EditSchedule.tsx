@@ -24,6 +24,8 @@ import SchedulerZod, {
 import SchedulerTypeRadio from "./SchedulerTypeRadio";
 import { getGMTTime, getISTTime } from "@/lib/utils";
 import DaysOfWeek from "./DaysOfWeek";
+import { FormField } from "@/components/ui/form";
+import ProductsSelector from "./ProductsSelector";
 
 export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
   const editForm = useForm<Scheduler>({
@@ -40,6 +42,7 @@ export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
       const { hours, minutes } = getGMTTime(schedule.hour, schedule.minute);
       schedule.minute = minutes;
       schedule.hour = hours;
+      console.log(schedule);
       const res = await PutRequest("/schedule/" + schedule.type, {
         ...schedule,
       });
@@ -89,31 +92,41 @@ export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
               </div>
             </div>
 
-            <div className="my-4 grid grid-cols-3 items-end gap-2">
-              <div className="flex w-full items-center space-x-2">
-                <div className="grid flex-1 gap-2">
-                  <Label htmlFor="minute">Minute</Label>
-                  <Input id="minute" {...editForm.register("minute")} />
-                  {editForm.formState.errors.minute && (
-                    <p className="m-0 text-sm text-red-400">
-                      {editForm.formState.errors.minute.message}
-                    </p>
-                  )}
-                </div>
+            <div className="flex w-full items-center space-x-2">
+              <div className="grid flex-1 gap-2">
+                <Label htmlFor="minute">Minute</Label>
+                <Input id="minute" {...editForm.register("minute")} />
+                {editForm.formState.errors.minute && (
+                  <p className="m-0 text-sm text-red-400">
+                    {editForm.formState.errors.minute.message}
+                  </p>
+                )}
               </div>
+            </div>
 
+            <div className="my-4 grid grid-cols-3 items-end gap-2">
               <SchedulerTypeRadio
                 setType={(type: TypeEnum) => editForm.setValue("type", type)}
                 getType={() => editForm.getValues("type")}
               />
-              <div>
-                <DaysOfWeek
-                  getDaysOfWeek={() => editForm.getValues("daysOfWeek")}
-                  setDaysOfWeek={(days: string) =>
-                    editForm.setValue("daysOfWeek", days)
-                  }
-                />
-              </div>
+              <FormField
+                name="products"
+                control={editForm.control}
+                render={(field) => {
+                  return (
+                    <ProductsSelector
+                      allProducts={schedule.allProducts}
+                      {...field}
+                    />
+                  );
+                }}
+              />
+              <DaysOfWeek
+                getDaysOfWeek={() => editForm.getValues("daysOfWeek")}
+                setDaysOfWeek={(days: string) =>
+                  editForm.setValue("daysOfWeek", days)
+                }
+              />
             </div>
 
             <Button

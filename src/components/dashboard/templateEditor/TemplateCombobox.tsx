@@ -22,7 +22,6 @@ import {
 import { useSearchParams } from "next/navigation";
 import type { Template } from "@/lib/types/TemplateEditor";
 import { useRouter } from "next/navigation";
-import revalPath from "@/lib/serverActions/revalPath";
 
 export default function TemplateCombobox({
   templates,

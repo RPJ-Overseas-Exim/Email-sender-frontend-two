@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
-import { FaArrowDown } from "react-icons/fa6";
+import { FaArrowDown, FaChevronDown } from "react-icons/fa6";
 
 export default function DaysOfWeek({
   getDaysOfWeek,
@@ -19,9 +19,9 @@ export default function DaysOfWeek({
   return (
     <Popover>
       <PopoverTrigger>
-        <div className="flex items-center gap-2 rounded-md border border-border p-2">
+        <div className="flex w-full items-center justify-center gap-2 rounded-md border border-border p-2">
           <p className="text-sm">Select Days </p>
-          <FaArrowDown className="text-md" />{" "}
+          <FaChevronDown className="text-xs" />
         </div>
       </PopoverTrigger>
       <PopoverContent>

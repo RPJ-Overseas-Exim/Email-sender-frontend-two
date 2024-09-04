@@ -11,9 +11,16 @@ export default async function page() {
   let schedule: Scheduler[] | null = null;
   try {
     const res = await GetRequest("/schedule");
-    if (res?.data) {
-      console.log(res?.data);
-      schedule = res.data;
+    let resAllProducts = await GetRequest("/products");
+    if (res?.data && resAllProducts?.data) {
+      resAllProducts = resAllProducts.data.map(
+        (product: { [x: string]: string }) => product.name,
+      );
+      schedule = res.data.map(
+        (schedule: { [x: string]: string | { [y: string]: string } }) => {
+          return { ...schedule, allProducts: resAllProducts };
+        },
+      );
     } else if (res?.error) {
       console.log(res.error);
     }
