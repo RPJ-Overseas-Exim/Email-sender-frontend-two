@@ -12,6 +12,7 @@ export default async function page() {
   try {
     const res = await GetRequest("/schedule");
     let resAllProducts = await GetRequest("/products");
+    console.log(res, resAllProducts);
     if (res?.data && resAllProducts?.data) {
       resAllProducts = resAllProducts.data.map(
         (product: { [x: string]: string }) => product.name,
