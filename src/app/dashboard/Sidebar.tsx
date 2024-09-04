@@ -2,13 +2,12 @@
 import "./Sidebar.css";
 import { MdEditDocument } from "react-icons/md";
 import { TbTableImport, TbLogout } from "react-icons/tb";
-import { FaUsers } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeSwitch from "@/components/context/ThemeSwitch";
 import { Logout } from "@/lib/requestHelpers/GetRequest";
 import useAuth from "@/components/context/AuthProvider";
-import { FaClock } from "react-icons/fa";
+import { FaGear } from "react-icons/fa6";
 
 export default function Sidebar() {
   const path = usePathname();
@@ -50,21 +49,15 @@ export default function Sidebar() {
             <>
               <li
                 className={
-                  (path === "/dashboard/scheduler" && "active--nav-item") || ""
+                  ((path === "/dashboard/settings" ||
+                    path === "/dashboard/settings/scheduler" ||
+                    path === "/dashboard/settings/users") &&
+                    "active--nav-item") ||
+                  ""
                 }
               >
-                <Link href="/dashboard/scheduler" className="aside__nav-item">
-                  <FaClock /> <span>Scheduler</span>
-                </Link>
-              </li>
-
-              <li
-                className={
-                  (path === "/dashboard/users" && "active--nav-item") || ""
-                }
-              >
-                <Link href="/dashboard/users" className="aside__nav-item">
-                  <FaUsers /> <span>Users</span>
+                <Link href="/dashboard/settings" className="aside__nav-item">
+                  <FaGear /> <span>Settings</span>
                 </Link>
               </li>
             </>
