@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 const SchedulerZod = z.object({
   hour: z
     .string()
@@ -21,7 +22,9 @@ const SchedulerZod = z.object({
       return true;
     }),
   type: z.enum(["enquiry", "reorder", "reorderDefault", "enquiryDefault"]),
+  daysOfWeek: z.string().default("?"),
 });
+
 export type TypeEnum =
   | "enquiry"
   | "reorder"
@@ -29,4 +32,5 @@ export type TypeEnum =
   | "enquiryDefault";
 
 export default SchedulerZod;
+
 export type Scheduler = z.infer<typeof SchedulerZod>;

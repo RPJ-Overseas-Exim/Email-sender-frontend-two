@@ -31,26 +31,38 @@ export default async function DataEditor({
 
 function extractData(
   resData: { [x: string]: string }[],
-  sentDateFilter: { startDate: string; endDate: string },
+  sentDateFilter: { startDate: string | null; endDate: string | null },
 ) {
   let customers: Customer[] = [];
+  let startDate = null,
+    endDate = null;
+  if (sentDateFilter.startDate)
+    startDate = new Date(sentDateFilter.startDate).toLocaleDateString();
+  if (sentDateFilter.endDate)
+    endDate = new Date(sentDateFilter.endDate).toLocaleDateString();
+
   resData.map((customer: { [x: string]: string }) => {
     const { id, name, email, product, number } = customer;
     let { sentDate } = customer;
 
-    let status;
+    let status: "sent" | "pending" = "pending";
+    const sentDateString = new Date(sentDate).toLocaleDateString();
+    const currDate = new Date().toLocaleDateString();
 
-    (new Date(sentDate ?? "") >= new Date(sentDateFilter.startDate) &&
-      new Date(sentDate ?? "") <= new Date(sentDateFilter.endDate)) ||
-    sentDate === new Date().toISOString().split("T")[0]
-      ? (status = "sent")
-      : (status = "pending");
+    if (startDate && sentDateString >= startDate) {
+      status = "sent";
+    }
+    if (endDate && sentDateString <= endDate) {
+      status = "sent";
+    }
+    if (sentDateString === currDate) status = "sent";
+
     customers.push({
       id,
       name,
       email,
       productId: product,
-      status: status === "sent" ? "sent" : "pending",
+      status: status,
       number: number,
     });
   });
@@ -63,11 +75,14 @@ async function applyFilters(searchParams: { [x: string]: string }) {
 
   try {
     const queryString = new URLSearchParams(searchParams);
-    const res = await GetRequest("/customers?" + queryString.toString());
+    let res;
+    if (queryString.get("startDate") || queryString.get("endDate")) {
+      res = await GetRequest("/stats?" + queryString.toString());
+    } else res = await GetRequest("/customers?" + queryString.toString());
     if (res?.data && res?.count) {
       data = extractData(res.data, {
-        endDate: searchParams["endDate"] ?? "",
-        startDate: searchParams["startDate"] ?? "",
+        endDate: searchParams["endDate"],
+        startDate: searchParams["startDate"],
       });
       count = res.count;
       return { data, count };

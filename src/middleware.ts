@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
 
   if (cookies.get("Authentication") && url.pathname === "/") {
     url.pathname = "/dashboard";
-    return NextResponse.rewrite(url);
+    return NextResponse.redirect(url);
   }
 
   if (!cookies.get("Authentication") && url.pathname.match("/dashboard")) {

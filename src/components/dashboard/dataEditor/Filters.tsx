@@ -5,11 +5,12 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { DatePicker } from "./DatePicker";
+import { StartDatePicker } from "./StartDatePicker";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { EndDatePicker } from "./EndDatePicker";
 
 function FilterTitle({ title }: { title: string }) {
   return <h3 className="text-base font-bold capitalize">{title}</h3>;
@@ -26,7 +27,7 @@ export default function Filters() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const [filters, setFilters] = useState({
-    limit: Number(searchParams.get("limit")) ?? 10,
+    limit: Number(searchParams.get("limit")) || 10,
     startDate: searchParams.get("startDate")
       ? new Date(searchParams.get("startDate") ?? "")
       : undefined,
@@ -46,9 +47,13 @@ export default function Filters() {
     for (const [query, value] of Object.entries(filters)) {
       if (query === "startDate" || query === "endDate") {
         if (!(value instanceof Date)) continue;
-        SParams.set(query, value.toISOString().split("T")[0]);
+        SParams.set(
+          query,
+          `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`,
+        );
         continue;
       }
+
       if (query === "limit" && Number(value) > 200) {
         toast.error("Limit cannot exceed 200");
         return;
@@ -100,11 +105,16 @@ export default function Filters() {
             </div>
             <div>
               <FilterTitle title={"Date"} />
-              <DatePicker
-                startDate={filters.startDate}
-                endDate={filters.endDate}
-                setFilters={setFilters}
-              />
+              <div className="space-y-2">
+                <StartDatePicker
+                  startDate={filters.startDate}
+                  setFilters={setFilters}
+                />
+                <EndDatePicker
+                  endDate={filters.endDate}
+                  setFilters={setFilters}
+                />
+              </div>
             </div>
             <div className="flex gap-2">
               <Button
@@ -118,7 +128,7 @@ export default function Filters() {
               <Button
                 type="button"
                 size="sm"
-                className="hover:bg- mt-4 w-full bg-red-600 px-3 text-white"
+                className="hover:bg- mt-4 w-full bg-red-600 px-3 text-white hover:bg-red-700"
                 onClick={() => {
                   const query = [];
                   if (searchParams.get("type")) {
@@ -127,6 +137,13 @@ export default function Filters() {
                   if (searchParams.get("offset")) {
                     query.push("offset=" + searchParams.get("offset"));
                   }
+                  setFilters((filters) => {
+                    return {
+                      ...filters,
+                      startDate: undefined,
+                      endDate: undefined,
+                    };
+                  });
                   router.push("/dashboard?" + query.join("&"));
                 }}
               >

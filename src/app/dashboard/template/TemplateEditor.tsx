@@ -11,7 +11,10 @@ export default async function TemplateEditor() {
     templates = res.data.map(
       (template: { name: string; body: string; subject: string }) => {
         const [type, name] = template.name.split("-");
-        templateMap[name] = { subject: template.subject, body: template.body };
+        templateMap[template.name] = {
+          subject: template.subject,
+          body: template.body,
+        };
         return {
           ...template,
           name,

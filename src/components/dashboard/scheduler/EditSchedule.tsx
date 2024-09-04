@@ -22,17 +22,24 @@ import SchedulerZod, {
   type TypeEnum,
 } from "@/lib/types/Scheduler";
 import SchedulerTypeRadio from "./SchedulerTypeRadio";
+import { getGMTTime, getISTTime } from "@/lib/utils";
+import DaysOfWeek from "./DaysOfWeek";
 
 export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
   const editForm = useForm<Scheduler>({
     resolver: zodResolver(SchedulerZod),
     defaultValues: {
       ...schedule,
+      minute: getISTTime(schedule.hour, schedule.minute).minutes,
+      hour: getISTTime(schedule.hour, schedule.minute).hours,
     },
   });
 
   const handleSubmit = async (schedule: Scheduler) => {
     try {
+      const { hours, minutes } = getGMTTime(schedule.hour, schedule.minute);
+      schedule.minute = minutes;
+      schedule.hour = hours;
       const res = await PutRequest("/schedule/" + schedule.type, {
         ...schedule,
       });
@@ -82,7 +89,7 @@ export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
               </div>
             </div>
 
-            <div className="my-4 flex items-end justify-between gap-2">
+            <div className="my-4 grid grid-cols-3 items-end gap-2">
               <div className="flex w-full items-center space-x-2">
                 <div className="grid flex-1 gap-2">
                   <Label htmlFor="minute">Minute</Label>
@@ -99,6 +106,14 @@ export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
                 setType={(type: TypeEnum) => editForm.setValue("type", type)}
                 getType={() => editForm.getValues("type")}
               />
+              <div>
+                <DaysOfWeek
+                  getDaysOfWeek={() => editForm.getValues("daysOfWeek")}
+                  setDaysOfWeek={(days: string) =>
+                    editForm.setValue("daysOfWeek", days)
+                  }
+                />
+              </div>
             </div>
 
             <Button

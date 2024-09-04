@@ -10,6 +10,7 @@ export default async function page() {
   try {
     const res = await GetRequest("/schedule");
     if (res?.data) {
+      console.log(res?.data);
       schedule = res.data;
     } else if (res?.error) {
       console.log(res.error);
@@ -25,7 +26,7 @@ export default async function page() {
         </h1>
       </div>
 
-      <div className="h-[calc(100dvh-94px)] w-[96%] overflow-auto">
+      <div className="h-[calc(100dvh-94px)] overflow-auto">
         {schedule ? (
           <div className="w-full">
             <CustomerTable data={schedule} columns={columns} />
