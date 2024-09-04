@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TypeEnum } from "@/lib/types/Scheduler";
+import { FaChevronDown } from "react-icons/fa6";
 
 export default function SchedulerTypeRadio({
   setType,
@@ -25,7 +26,10 @@ export default function SchedulerTypeRadio({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{getType() || "Select type"}</Button>
+        <Button variant="outline" className="flex items-center gap-2">
+          <span>{getType() || "Select type"}</span>
+          <FaChevronDown className="text-xs" />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuRadioGroup
