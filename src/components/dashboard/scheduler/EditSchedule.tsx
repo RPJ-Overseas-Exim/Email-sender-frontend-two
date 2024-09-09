@@ -17,14 +17,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import revalPath from "@/lib/serverActions/revalPath";
 import PutRequest from "@/lib/requestHelpers/PutRequest";
-import SchedulerZod, {
-  type Scheduler,
-  type TypeEnum,
-} from "@/lib/types/Scheduler";
-import SchedulerTypeRadio from "./SchedulerTypeRadio";
+import SchedulerZod, { type Scheduler } from "@/lib/types/Scheduler";
 import { getGMTTime, getISTTime } from "@/lib/utils";
 import DaysOfWeek from "./DaysOfWeek";
-import { FormField } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import ProductsSelector from "./ProductsSelector";
 
 export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
@@ -42,7 +45,17 @@ export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
       const { hours, minutes } = getGMTTime(schedule.hour, schedule.minute);
       schedule.minute = minutes;
       schedule.hour = hours;
-      console.log(schedule);
+
+      if (parseInt(schedule.limit) >= 1) {
+        const resLimit = await PutRequest("/pointers?name=" + schedule.type, {
+          limit: schedule.limit,
+        });
+        if (!resLimit.data) {
+          toast.error("Schedule Edit Failed");
+          return;
+        }
+      }
+
       const res = await PutRequest("/schedule/" + schedule.type, {
         ...schedule,
       });
@@ -74,70 +87,88 @@ export default function EditSchedule({ schedule }: { schedule: Scheduler }) {
         </DialogTrigger>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Edit Schedule</DialogTitle>
+            <DialogTitle>
+              Edit Schedule: {editForm.getValues("type")}
+            </DialogTitle>
             <DialogDescription>
               Edit and update the schedule for the email sender app.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={editForm.handleSubmit(handleSubmit)}>
-            <div className="my-4 flex items-center space-x-2">
-              <div className="grid flex-1 gap-2">
-                <Label htmlFor="hour">Hour</Label>
-                <Input id="hour" {...editForm.register("hour")} />
-                {editForm.formState.errors?.hour && (
-                  <p className="m-0 text-sm text-red-400">
-                    {editForm.formState.errors.hour.message}
-                  </p>
-                )}
+          <Form {...editForm}>
+            <form onSubmit={editForm.handleSubmit(handleSubmit)}>
+              <div className="my-4 flex items-center space-x-2">
+                <div className="grid flex-1 gap-2">
+                  <Label htmlFor="hour">Hour</Label>
+                  <Input id="hour" {...editForm.register("hour")} />
+                  {editForm.formState.errors?.hour && (
+                    <p className="m-0 text-sm text-red-400">
+                      {editForm.formState.errors.hour.message}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div className="flex w-full items-center space-x-2">
-              <div className="grid flex-1 gap-2">
-                <Label htmlFor="minute">Minute</Label>
-                <Input id="minute" {...editForm.register("minute")} />
-                {editForm.formState.errors.minute && (
-                  <p className="m-0 text-sm text-red-400">
-                    {editForm.formState.errors.minute.message}
-                  </p>
-                )}
+              <div className="flex w-full items-center space-x-2">
+                <div className="grid flex-1 gap-2">
+                  <Label htmlFor="minute">Minute</Label>
+                  <Input id="minute" {...editForm.register("minute")} />
+                  {editForm.formState.errors.minute && (
+                    <p className="m-0 text-sm text-red-400">
+                      {editForm.formState.errors.minute.message}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div className="my-4 grid grid-cols-3 items-end gap-2">
-              <SchedulerTypeRadio
-                setType={(type: TypeEnum) => editForm.setValue("type", type)}
-                getType={() => editForm.getValues("type")}
-              />
-              <FormField
-                name="products"
-                control={editForm.control}
-                render={(field) => {
-                  return (
-                    <ProductsSelector
-                      allProducts={schedule.allProducts}
-                      {...field}
-                    />
-                  );
-                }}
-              />
-              <DaysOfWeek
-                getDaysOfWeek={() => editForm.getValues("daysOfWeek")}
-                setDaysOfWeek={(days: string) =>
-                  editForm.setValue("daysOfWeek", days)
-                }
-              />
-            </div>
+              <div className="my-4 flex w-full items-end justify-between gap-4">
+                <FormField
+                  name="limit"
+                  control={editForm.control}
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="w-full">
+                        <FormLabel>Limit</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Limit" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
 
-            <Button
-              type="submit"
-              size="sm"
-              className="w-full bg-sky-500 px-3 text-white hover:bg-sky-700"
-              disabled={editForm.formState.isSubmitting}
-            >
-              <span>Edit</span>
-            </Button>
-          </form>
+              <div className="my-4 grid grid-cols-2 items-end gap-2">
+                <FormField
+                  name="products"
+                  control={editForm.control}
+                  render={({ field }) => {
+                    return (
+                      <ProductsSelector
+                        allProducts={schedule.allProducts}
+                        field={field}
+                      />
+                    );
+                  }}
+                />
+                <DaysOfWeek
+                  getDaysOfWeek={() => editForm.getValues("daysOfWeek")}
+                  setDaysOfWeek={(days: string) =>
+                    editForm.setValue("daysOfWeek", days)
+                  }
+                />
+              </div>
+
+              <Button
+                type="submit"
+                size="sm"
+                className="w-full bg-sky-500 px-3 text-white hover:bg-sky-700"
+                disabled={editForm.formState.isSubmitting}
+              >
+                <span>Edit</span>
+              </Button>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
     </>

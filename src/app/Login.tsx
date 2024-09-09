@@ -6,14 +6,12 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { PoppinsHeading } from "@/lib/fonts";
 import { Login as login } from "@/lib/requestHelpers/PostRequest";
 import { useRouter } from "next/navigation";
@@ -45,7 +43,7 @@ export default function Login() {
       const res = await login(data);
       if (res?.token) {
         setAuth({ login: true, role: res?.role || "user" });
-        router.refresh();
+        router.push("/dashboard");
       } else if (res.error) {
         toast.error(res.error);
         form.reset();
