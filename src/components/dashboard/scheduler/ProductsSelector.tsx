@@ -12,25 +12,28 @@ export default function ProductsSelector({
   field,
   allProducts,
 }: {
+  allProducts: string[];
   field: ControllerRenderProps<
     {
+      allProducts: string[];
       products: string[];
-      hour: string;
       type: "enquiry" | "reorder" | "reorderDefault" | "enquiryDefault";
+      hour: string;
+      status: "active" | "inactive";
       minute: string;
       daysOfWeek: string;
-      allProducts: string[];
+      limit: string;
     },
     "products"
   >;
-  allProducts: string[];
 }) {
   const [products, setProducts] = useState<string[]>(field.value);
+
   return (
     <Popover>
       <PopoverTrigger>
         <div className="flex items-center justify-center gap-2 rounded-md border border-border p-2">
-          <p className="text-sm">Products </p>
+          <p className="text-sm">Products</p>
           <FaChevronDown className="text-xs" />
         </div>
       </PopoverTrigger>
