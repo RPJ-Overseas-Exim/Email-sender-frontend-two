@@ -13,16 +13,39 @@ export default async function page() {
     const res = await GetRequest("/schedule");
     await new Promise((resolve) => setTimeout(resolve, 100));
     let resAllProducts = await GetRequest("/products");
-    console.log(res, resAllProducts);
-    if (res?.data && resAllProducts?.data) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    let resPointers = await GetRequest("/pointers");
+
+    if (res?.data && resAllProducts?.data && resPointers?.data) {
       resAllProducts = resAllProducts.data.map(
         (product: { [x: string]: string }) => product.name,
       );
-      schedule = res.data.map(
-        (schedule: { [x: string]: string | { [y: string]: string } }) => {
-          return { ...schedule, allProducts: resAllProducts };
-        },
+
+      //create a hashmap of pointerName=>pointer.data
+      const pointers = Object.fromEntries(
+        resPointers.data.map(
+          (pointer: {
+            name: string;
+            id: string;
+            count: number;
+            limit: number;
+          }) => {
+            return [
+              pointer.name,
+              { limit: pointer.limit, count: pointer.count },
+            ];
+          },
+        ),
       );
+
+      schedule = res.data.map((schedule: { [x: string]: string }) => {
+        return {
+          ...schedule,
+          allProducts: resAllProducts,
+          status: schedule.active === "true" ? "active" : "inactive",
+          limit: String(pointers[schedule.type].limit),
+        };
+      });
     } else if (res?.error) {
       console.log(res.error);
     }

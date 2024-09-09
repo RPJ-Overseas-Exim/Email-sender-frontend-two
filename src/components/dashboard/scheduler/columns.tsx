@@ -16,7 +16,7 @@ import DeleteRequest from "@/lib/requestHelpers/DeleteRequest";
 import { Scheduler } from "@/lib/types/Scheduler";
 import PutRequest from "@/lib/requestHelpers/PutRequest";
 import EditSchedule from "./EditSchedule";
-import { getISTTime } from "@/lib/utils";
+import { cn, getISTTime } from "@/lib/utils";
 
 const ScheduleCell = ({ schedule }: { schedule: Scheduler }) => {
   const reschedule = async () => {
@@ -86,7 +86,7 @@ export const columns: ColumnDef<Scheduler>[] = [
     cell: ({ row }) => {
       const daysOfWeek = row.original.daysOfWeek;
       return (
-        <div className="max-w-[10rem]">{daysOfWeek.replaceAll(/,/g, ", ")}</div>
+        <div className="w-[10rem]">{daysOfWeek.replaceAll(/,/g, ", ")}</div>
       );
     },
   },
@@ -108,12 +108,33 @@ export const columns: ColumnDef<Scheduler>[] = [
       return minutes;
     },
   },
+  // Column to display list of products for which the scheduler is set its also visible from the edit popup so I am commenting it here
+  // {
+  //   accessorKey: "products",
+  //   header: "Products",
+  //   cell: ({ row }) => {
+  //     const products = row.original.products;
+  //     return <div className="w-[10rem]">{products.join(", ")}</div>;
+  //   },
+  // },
   {
-    accessorKey: "products",
-    header: "Products",
+    accessorKey: "active",
+    header: "Status",
     cell: ({ row }) => {
-      const products = row.original.products;
-      return <div className="max-w-[10rem]">{products.join(", ")}</div>;
+      const { status } = row.original;
+      return (
+        <p
+          id="number"
+          className={cn(
+            "flex w-fit items-center gap-2 rounded-sm border px-2",
+            status === "inactive"
+              ? "border-gray-400 text-gray-400"
+              : "border-green-600 text-green-600",
+          )}
+        >
+          {status}
+        </p>
+      );
     },
   },
   {
