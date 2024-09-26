@@ -36,7 +36,7 @@ export default function ViewUser({ user }: { user: User }) {
                 {user.email}&nbsp;
                 <button
                   title="copy email"
-                  onClick={(e) => navigator.clipboard.writeText(user.email)}
+                  onClick={(_) => navigator.clipboard.writeText(user.email)}
                   className="inline-block rounded-sm border border-foreground p-1 text-base text-foreground"
                 >
                   <LuCopy />
@@ -44,7 +44,7 @@ export default function ViewUser({ user }: { user: User }) {
               </p>
             </div>
 
-            <div className="w-full md:w-[20%]">
+            <div className="w-full md:w-fit">
               <label
                 htmlFor="password"
                 className="text-xs font-bold text-muted-foreground"
