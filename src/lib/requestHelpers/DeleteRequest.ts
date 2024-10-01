@@ -7,7 +7,6 @@ export default async function DeleteRequest(url: string) {
 
   let res = null;
   try {
-    console.log(API_URL + API_VER + url);
     res = await (
       await fetch(API_URL + API_VER + url, {
         method: "DELETE",
