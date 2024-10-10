@@ -33,9 +33,12 @@ export default function page() {
                 </ul>
 
                 <h2 className="text-red-600 text-lg font-bold py-4">Danger Zone</h2>
-                <ul>
+                <ul className="space-y-2">
                     <li>
-                        <DeleteDialog/>
+                        <DeleteDialog type="enquiry"/>
+                    </li>
+                    <li>
+                        <DeleteDialog type="reorder"/>
                     </li>
                 </ul>
 

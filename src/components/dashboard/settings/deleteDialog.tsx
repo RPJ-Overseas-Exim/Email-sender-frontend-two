@@ -14,13 +14,13 @@ import { toast } from "sonner";
 import revalPath from "@/lib/serverActions/revalPath";
 import DeleteRequest from "@/lib/requestHelpers/DeleteRequest";
 
-export default function DeleteDialog() {
+export default function DeleteDialog({type}:{type:"enquiry" | "reorder"}) {
 
     const handleDelete = async () => {
         try {
-            await DeleteRequest("/customers")
+            await DeleteRequest(`/customers?type${type}`)
             revalPath("/dashboard")
-            toast.success("All Customers Deleted")
+            toast.success(`All ${type} Customers Deleted`)
         } catch (e) {
             toast.error("Couldn't delete any customers")
         }
@@ -31,9 +31,9 @@ export default function DeleteDialog() {
             <Dialog>
                 <DialogTrigger asChild>
                     <Button
-                        className="bg-red-600 hover:bg-red-700 rounded-md py-2 px-4 w-full font-semibold justify-start text-white"
+                        className="bg-red-600 rounded-none border-2 border-red-600 hover:text-red-600 hover:bg-transparent py-2 px-4 w-full font-semibold justify-start text-white"
                     >
-                        Delete all customers
+                        Delete {type} customers
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
@@ -42,7 +42,7 @@ export default function DeleteDialog() {
                             Are you Sure?
                         </DialogTitle>
                         <DialogDescription>
-                            This operation cannot be undone it will delete all the customers
+                            This operation cannot be undone it will delete all the {type} customers
                         </DialogDescription>
                     </DialogHeader>
 

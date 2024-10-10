@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -23,6 +21,7 @@ export function StartDatePicker({
       limit: number;
       startDate: Date | undefined;
       endDate: Date | undefined;
+      q: string
     }>
   >;
 }) {

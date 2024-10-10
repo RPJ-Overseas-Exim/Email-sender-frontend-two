@@ -1,4 +1,3 @@
-"use client";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -21,6 +20,7 @@ export function EndDatePicker({
       limit: number;
       startDate: Date | undefined;
       endDate: Date | undefined;
+      q: string
     }>
   >;
 }) {

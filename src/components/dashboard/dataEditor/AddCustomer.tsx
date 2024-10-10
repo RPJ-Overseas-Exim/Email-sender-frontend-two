@@ -42,10 +42,11 @@ export default function AddCustomer() {
       const res = await PostRequest("/customers/" + customer.type, {
         customersData: [customer],
       });
-      if (res.data) {
-        toast.success("Order Added successfully.");
+      if (res?.data) {
+        toast.success("Customer Added successfully.");
         return revalPath("/dashboard");
       }
+      toast.success(res?.message || "Customer Couldn't be added")
     } catch (error) {
       console.error(error);
     }

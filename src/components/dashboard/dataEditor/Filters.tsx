@@ -20,6 +20,7 @@ const FiltersZod = z.object({
   limit: z.number(),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
+  q:z.string()
 });
 
 export default function Filters() {
@@ -34,6 +35,7 @@ export default function Filters() {
     endDate: searchParams.get("endDate")
       ? new Date(searchParams.get("startDate") ?? "")
       : undefined,
+    q: searchParams.get("q") || ""
   });
 
   const applyFilters = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -96,6 +98,7 @@ export default function Filters() {
               <Input
                 type="number"
                 value={filters.limit}
+                placeholder="10"
                 onChange={(e) =>
                   setFilters((filters) => {
                     return { ...filters, limit: Number(e.target.value) ?? 10 };
@@ -103,6 +106,7 @@ export default function Filters() {
                 }
               />
             </div>
+
             <div>
               <FilterTitle title={"Date"} />
               <div className="space-y-2">
@@ -116,6 +120,21 @@ export default function Filters() {
                 />
               </div>
             </div>
+
+            <div>
+              <FilterTitle title={"Search"} />
+              <Input
+                type="text"
+                value={filters.q}
+                placeholder="Search a customer"
+                onChange={(e) =>
+                  setFilters((filters) => {
+                    return { ...filters, q: e.target.value };
+                  })
+                }
+              />
+            </div>
+
             <div className="flex gap-2">
               <Button
                 type="submit"
