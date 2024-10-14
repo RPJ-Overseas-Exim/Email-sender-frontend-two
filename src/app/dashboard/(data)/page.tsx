@@ -22,7 +22,7 @@ export default async function DataEditor({
             <ThemeSwitch />
           </div>
         </div>
-        <ImportExport data={data} />
+        <ImportExport type={searchParams["type"] || ""} limit={Number(count)} />
       </div>
       <SelectTable data={data} count={Number(count)} />
     </section>

@@ -19,7 +19,7 @@ export default function ImportCSV() {
 
     const reader = new FileReader();
     reader.readAsText(file, "UTF-8");
-    reader.onload = async (e: ProgressEvent<FileReader>) => {
+    reader.onload = async () => {
       if (reader?.result) {
         const jsonFile = await csvToJson(String(reader.result));
         const type = searchParams.get("type") || "enquiry";
