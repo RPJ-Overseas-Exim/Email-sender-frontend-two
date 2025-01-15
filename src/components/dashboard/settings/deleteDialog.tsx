@@ -18,7 +18,7 @@ export default function DeleteDialog({type}:{type:"enquiry" | "reorder"}) {
 
     const handleDelete = async () => {
         try {
-            await DeleteRequest(`/customers?type${type}`)
+            await DeleteRequest(`/customers?type=${type}`)
             revalPath("/dashboard")
             toast.success(`All ${type} Customers Deleted`)
         } catch (e) {
