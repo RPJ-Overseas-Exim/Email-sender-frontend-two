@@ -7,7 +7,6 @@ export const CustomerZod = z.object({
   status: z.enum(["pending", "sent"]),
   email: z.string().email(),
   number: z.string().optional(),
-  updatedAt: z.date()
 });
 
 export type Customer = z.infer<typeof CustomerZod>;

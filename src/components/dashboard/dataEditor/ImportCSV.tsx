@@ -22,6 +22,7 @@ export default function ImportCSV() {
     reader.onload = async () => {
       if (reader?.result) {
         const jsonFile = await csvToJson(String(reader.result));
+        console.log(jsonFile)
         const type = searchParams.get("type") || "enquiry";
         try {
           const res = await PostRequest("/customers/" + type, {
@@ -86,7 +87,6 @@ const csvToJson = async (file: string) => {
         email = lineArray[emailIndex],
         product = lineArray[productIndex],
         number = lineArray[numberIndex];
-      const updatedAt = new Date();
 
       const jsonObj = {
         name,
@@ -94,12 +94,11 @@ const csvToJson = async (file: string) => {
         productId: productsJson[product?.toLowerCase()],
         number,
         status: "pending",
-        updatedAt
       };
 
       const valid = CustomerZod.safeParse(jsonObj);
       if (valid.success) jsonFile.push(jsonObj);
-      if (valid.error) console.log(valid.error);
+      //if (valid.error) console.log(valid.error);
     }
     return jsonFile;
   } catch (error) {
