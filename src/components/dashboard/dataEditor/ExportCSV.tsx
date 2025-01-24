@@ -43,7 +43,6 @@ export default function ExportCSV({ limit, type }: { limit: number, type: string
 
             const data = await GetRequest(`/customers${queryParams}`);
             if (data?.data) {
-                console.log(data.data)
                 return csvURI(data.data)
             }
         }

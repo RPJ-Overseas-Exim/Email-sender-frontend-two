@@ -31,7 +31,7 @@ export default function ImportCSV() {
             revalPath("/dashboard");
             toast.success("Customers added into " + type + " table");
           } else {
-            toast.error("Customers couldn't be added");
+            toast.error(res?.error || "Customers couldn't be added");
           }
         } catch (error) {
           console.error(error);
@@ -86,6 +86,7 @@ const csvToJson = async (file: string) => {
         email = lineArray[emailIndex],
         product = lineArray[productIndex],
         number = lineArray[numberIndex];
+      const updatedAt = new Date();
 
       const jsonObj = {
         name,
@@ -93,7 +94,9 @@ const csvToJson = async (file: string) => {
         productId: productsJson[product?.toLowerCase()],
         number,
         status: "pending",
+        updatedAt
       };
+
       const valid = CustomerZod.safeParse(jsonObj);
       if (valid.success) jsonFile.push(jsonObj);
       if (valid.error) console.log(valid.error);
