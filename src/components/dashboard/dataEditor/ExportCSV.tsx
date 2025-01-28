@@ -1,11 +1,14 @@
 import GetRequest from "@/lib/requestHelpers/GetRequest";
 import { Customer } from "@/lib/types/dataEditor/dataEditor";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaFileExport } from "react-icons/fa";
 
-export default function ExportCSV({ limit, type }: { limit: number, type: string }) {
+export default function ExportCSV({ limit}: { limit: number}) {
     const [data, setData] = useState("")
+    const searchParams = useSearchParams()
+    const type = searchParams.get("type") || "enquiry";
 
     function dataToCSV(data: Customer[]) {
         if (!data || data?.length <= 0) return "";
@@ -32,13 +35,11 @@ export default function ExportCSV({ limit, type }: { limit: number, type: string
         return encodeURI(dataToCSV(data));
     };
 
-
-
     useEffect(() => {
         async function getDataString() {
             let queryParams = `?limit=${limit}`
             if(type !== ""){
-                queryParams += "type=" + type
+                queryParams += "&type=" + type
             }
 
             const data = await GetRequest(`/customers${queryParams}`);
@@ -54,7 +55,7 @@ export default function ExportCSV({ limit, type }: { limit: number, type: string
             .catch(e => {
                 console.log(e)
             })
-    }, [])
+    }, [type])
 
     return (
         <div>
